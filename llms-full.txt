@@ -1,9 +1,10 @@
-# Manower Studio — Complete Technical & Service Documentation
+# Manower Labs — Complete Technical & Service Documentation
 
 ## 1. Overview
-Manower Studio is an engineering studio delivering tailored operational software for wholesale distributors, logistics fleets, manufacturers, and multi-location retail enterprises. The studio bridges the gap between clunky, expensive enterprise ERPs (SAP, Oracle) and generic off-the-shelf SaaS by building custom, high-speed software that clients own 100%.
+Manower Labs is an engineering and AI agent laboratory delivering autonomous agent swarms and tailored operational software for wholesale distributors, logistics fleets, manufacturers, and multi-location retail enterprises. The lab bridges the gap between clunky, expensive enterprise ERPs (SAP, Oracle) and generic off-the-shelf SaaS by building custom, high-speed software and autonomous AI agents that clients own 100%.
 
 ## 2. Technical Stack & Capabilities
+- **Autonomous Agents & AI**: Python (LangGraph, CrewAI, AutoGen, Gemini 3 API), Multi-Agent Swarms, Background Cron Schedulers, Tool Execution Bridges.
 - **Backend & Automation**: Python (Flask, FastAPI), SQLite, PostgreSQL, PyInstaller, Node.js.
 - **Frontend & Interfaces**: Modern Semantic HTML5, Tailwind CSS, Lucide Icons, Vanilla JavaScript (zero bloat, instant loading).
 - **Computer Vision & Hardware Integration**: Mobile camera QR barcode scanners (HTML5 MediaDevices), in-browser receipt printing, thermal printer layouts.
@@ -11,6 +12,10 @@ Manower Studio is an engineering studio delivering tailored operational software
 - **Deployment**: Local PC (localhost), LAN Wi-Fi network servers, Cloudflare Tunnels for secure external access, Vercel edge deployment for web portals.
 
 ## 3. Core Solutions Catalog
+
+### Flagship: Autonomous AI Agents & Multi-Agent Swarms
+- **Problem Solved**: High payroll costs and human fatigue coordinating repetitive cross-system tasks between WhatsApp, ERP spreadsheets, and dispatch slips.
+- **Our Solution**: Autonomous teams of AI agents that coordinate 24/7 across terminals, browsers, and local databases. One agent monitors stock levels, another drafts personalized WhatsApp catalogs, and a third audits dispatch slips.
 
 ### Solution A: Custom Logistics & Lorry Receipt (LR) System
 - **Problem Solved**: Manual paper bilties get lost, tracking phone calls waste hours, and warehouse drivers cannot use complex desktop apps.
@@ -29,12 +34,12 @@ Manower Studio is an engineering studio delivering tailored operational software
 - **Our Solution**: Lightweight, self-contained HTML/SQLite application that runs off a local PC or pen drive, generating ready-to-audit monthly Excel registers.
 
 ## 4. Privacy & Data Protection Guarantee
-Manower Studio strictly adheres to a zero-leak data architecture:
+Manower Labs strictly adheres to a zero-leak data architecture:
 - All client transactional records, financial figures, customer names, and databases remain 100% on the client's local infrastructure unless explicitly opted into secure cloud syncing.
 - Showcase materials, live interactive demos, and portfolio previews are strictly white-labeled and use synthetic mock datasets.
 
 ## 5. Contact & Engagement
-- **Website**: https://manowerstudio.vercel.app/
+- **Website**: https://manowerlabs.vercel.app/
 - **Inquiry Channel**: Direct WhatsApp Business & Consultation Form
 - **Headquarters**: Hyderabad, Telangana, India
 - **Global Delivery**: Available for remote B2B contracts across North America, Europe, Middle East, and APAC.

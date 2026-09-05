@@ -1,6 +1,6 @@
-# Manower Studio — Web & Agency Platform
+# Manower Labs — Autonomous AI Agents & Custom Business Systems
 
-Modern B2B custom software & business operations studio website, engineered for **Modern Technical SEO**, **Local Geo-Targeting (Hyderabad & Telangana)**, and **LLM / AI Search Engine Optimization (GEO)**.
+Modern B2B autonomous AI agents & business operations software website, engineered for **Modern Technical SEO**, **Local Geo-Targeting (Hyderabad & Telangana)**, and **LLM / AI Search Engine Optimization (GEO)**.
 
 ---
 
@@ -10,29 +10,28 @@ Modern B2B custom software & business operations studio website, engineered for 
 Open PowerShell in this folder (`c:\Users\attar\Documents\manowerstudio`) and run:
 
 ```bash
-git init
 git add .
-git commit -m "feat: initial release of Manower Studio website"
+git commit -m "feat: upgrade brand to Manower Labs with Autonomous AI Agents"
 ```
 
 ### Step 2: Push to GitHub
-1. Create a new repository on [GitHub](https://github.com/new) named `manowerstudio` (public or private).
+1. Create a new repository on [GitHub](https://github.com/new) named `manowerlabs` (or `manowerstudio`).
 2. Link your local repo and push:
 
 ```bash
 git branch -M main
-git remote add origin https://github.com/YOUR_GITHUB_USERNAME/manowerstudio.git
+git remote add origin https://github.com/YOUR_GITHUB_USERNAME/manowerlabs.git
 git push -u origin main
 ```
 
 ### Step 3: Deploy on Vercel
 1. Go to [Vercel](https://vercel.com/) and log in with your GitHub account.
 2. Click **"Add New..."** &rarr; **"Project"**.
-3. Select `manowerstudio` from your GitHub repository list.
+3. Select your repository from your GitHub list.
 4. Leave all build settings default (Framework Preset: *Other*, Root Directory: `./`).
 5. Click **Deploy**.
 
-Your website will be live worldwide on a secure `https://manowerstudio.vercel.app` domain with instant global CDN caching and automatic HTTPS!
+Your website will be live worldwide on a secure `https://manowerlabs.vercel.app` domain with instant global CDN caching and automatic HTTPS!
 
 ---
 
@@ -54,7 +53,7 @@ To update your WhatsApp phone number:
 
 ### 2. Local Geo-SEO (Hyderabad & Regional Markets)
 - Hyderabad geographic coordinates (`17.385044, 78.486671`) and `geo.region: IN-TG`.
-- Schema.org `ProfessionalService` structured data linking your studio to Hyderabad commercial hubs (Begum Bazar, Secunderabad, KPHB, Madhapur, Gachibowli) while declaring global remote service capability.
+- Schema.org `ProfessionalService` structured data linking your lab to Hyderabad commercial hubs (Begum Bazar, Secunderabad, KPHB, Madhapur, Gachibowli) while declaring global remote service capability.
 
 ### 3. LLM & Generative Engine Optimization (GEO)
 - `llms.txt` and `llms-full.txt` files compliant with the open standard for AI web crawlers (PerplexityBot, GPTBot, ClaudeBot).
