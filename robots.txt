@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+
+# LLM & AI Search Engine Crawlers (Generative Engine Optimization)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Canonical Sitemaps & LLM Directives
+Sitemap: https://manowerstudio.vercel.app/sitemap.xml
+LLMs-Txt: https://manowerstudio.vercel.app/llms.txt

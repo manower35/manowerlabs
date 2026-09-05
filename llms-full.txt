@@ -1,0 +1,40 @@
+# Manower Studio — Complete Technical & Service Documentation
+
+## 1. Overview
+Manower Studio is an engineering studio delivering tailored operational software for wholesale distributors, logistics fleets, manufacturers, and multi-location retail enterprises. The studio bridges the gap between clunky, expensive enterprise ERPs (SAP, Oracle) and generic off-the-shelf SaaS by building custom, high-speed software that clients own 100%.
+
+## 2. Technical Stack & Capabilities
+- **Backend & Automation**: Python (Flask, FastAPI), SQLite, PostgreSQL, PyInstaller, Node.js.
+- **Frontend & Interfaces**: Modern Semantic HTML5, Tailwind CSS, Lucide Icons, Vanilla JavaScript (zero bloat, instant loading).
+- **Computer Vision & Hardware Integration**: Mobile camera QR barcode scanners (HTML5 MediaDevices), in-browser receipt printing, thermal printer layouts.
+- **Image Processing**: Pillow/PIL automation for high-resolution 5-in-1, 3:4 aspect ratio, and vertical collages generated dynamically from raw product photography.
+- **Deployment**: Local PC (localhost), LAN Wi-Fi network servers, Cloudflare Tunnels for secure external access, Vercel edge deployment for web portals.
+
+## 3. Core Solutions Catalog
+
+### Solution A: Custom Logistics & Lorry Receipt (LR) System
+- **Problem Solved**: Manual paper bilties get lost, tracking phone calls waste hours, and warehouse drivers cannot use complex desktop apps.
+- **Our Solution**: Local-first LR tracking dashboard on PC. Each printed dispatch receipt includes a high-resolution QR code. Loading staff or delivery drivers scan the QR code via their phone camera (via local Wi-Fi or secure tunnel) to instantly mark status (*Booked*, *Reached Hub*, *Out for Delivery*, *Delivered*) and snap Proof of Delivery (POD) photos directly into the PC database.
+
+### Solution B: WhatsApp Catalog & Marketing Engine
+- **Problem Solved**: Manually cropping, collaging, and sending hundreds of new product photos to retailers on WhatsApp takes 3-4 hours daily.
+- **Our Solution**: Automated Python script that watches product folders, creates branded 5-in-1 multi-angle collages with price codes, produces interactive web catalog viewers, and dispatches targeted WhatsApp broadcasts in seconds.
+
+### Solution C: Desktop Customer Auto-Lookup & Mini-ERP
+- **Problem Solved**: Staff wasting time looking up old ledger registers, phone numbers, and GST details across multiple disconnected spreadsheets.
+- **Our Solution**: 1-click standalone Windows desktop application (.exe) with instant auto-complete search across thousands of customer records, auto-syncing with Excel and SQLite databases.
+
+### Solution D: Offline-First Staff Attendance
+- **Problem Solved**: Biometric machines failing offline or SaaS attendance apps charging high recurring monthly fees.
+- **Our Solution**: Lightweight, self-contained HTML/SQLite application that runs off a local PC or pen drive, generating ready-to-audit monthly Excel registers.
+
+## 4. Privacy & Data Protection Guarantee
+Manower Studio strictly adheres to a zero-leak data architecture:
+- All client transactional records, financial figures, customer names, and databases remain 100% on the client's local infrastructure unless explicitly opted into secure cloud syncing.
+- Showcase materials, live interactive demos, and portfolio previews are strictly white-labeled and use synthetic mock datasets.
+
+## 5. Contact & Engagement
+- **Website**: https://manowerstudio.vercel.app/
+- **Inquiry Channel**: Direct WhatsApp Business & Consultation Form
+- **Headquarters**: Hyderabad, Telangana, India
+- **Global Delivery**: Available for remote B2B contracts across North America, Europe, Middle East, and APAC.

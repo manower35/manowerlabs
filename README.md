@@ -1,0 +1,61 @@
+# Manower Studio — Web & Agency Platform
+
+Modern B2B custom software & business operations studio website, engineered for **Modern Technical SEO**, **Local Geo-Targeting (Hyderabad & Telangana)**, and **LLM / AI Search Engine Optimization (GEO)**.
+
+---
+
+## 🚀 2-Minute Deployment to GitHub & Vercel
+
+### Step 1: Initialize Git and Commit
+Open PowerShell in this folder (`c:\Users\attar\Documents\manowerstudio`) and run:
+
+```bash
+git init
+git add .
+git commit -m "feat: initial release of Manower Studio website"
+```
+
+### Step 2: Push to GitHub
+1. Create a new repository on [GitHub](https://github.com/new) named `manowerstudio` (public or private).
+2. Link your local repo and push:
+
+```bash
+git branch -M main
+git remote add origin https://github.com/YOUR_GITHUB_USERNAME/manowerstudio.git
+git push -u origin main
+```
+
+### Step 3: Deploy on Vercel
+1. Go to [Vercel](https://vercel.com/) and log in with your GitHub account.
+2. Click **"Add New..."** &rarr; **"Project"**.
+3. Select `manowerstudio` from your GitHub repository list.
+4. Leave all build settings default (Framework Preset: *Other*, Root Directory: `./`).
+5. Click **Deploy**.
+
+Your website will be live worldwide on a secure `https://manowerstudio.vercel.app` domain with instant global CDN caching and automatic HTTPS!
+
+---
+
+## 🛠️ How to Customize Your Contact Details
+
+To update your WhatsApp phone number:
+1. Open `index.html`.
+2. Find instances of `919876543210` (or `+919876543210`).
+3. Replace them with your actual WhatsApp business number (with country code, e.g. `91XXXXXXXXXX`).
+
+---
+
+## 🔍 Search & AI Optimization Features
+
+### 1. Modern Technical SEO
+- Semantic HTML5 with clean heading hierarchy.
+- OpenGraph and Twitter Card social preview tags for rich sharing on WhatsApp and social media.
+- `sitemap.xml` ready for Google Search Console submission.
+
+### 2. Local Geo-SEO (Hyderabad & Regional Markets)
+- Hyderabad geographic coordinates (`17.385044, 78.486671`) and `geo.region: IN-TG`.
+- Schema.org `ProfessionalService` structured data linking your studio to Hyderabad commercial hubs (Begum Bazar, Secunderabad, KPHB, Madhapur, Gachibowli) while declaring global remote service capability.
+
+### 3. LLM & Generative Engine Optimization (GEO)
+- `llms.txt` and `llms-full.txt` files compliant with the open standard for AI web crawlers (PerplexityBot, GPTBot, ClaudeBot).
+- JSON-LD `FAQPage` and `SoftwareApplication` structured schemas that AI models extract directly for conversational answers.
