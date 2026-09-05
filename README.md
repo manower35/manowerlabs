@@ -37,10 +37,7 @@ Your website will be live worldwide on a secure `https://manowerlabs.vercel.app`
 
 ## 🛠️ How to Customize Your Contact Details
 
-To update your WhatsApp phone number:
-1. Open `index.html`.
-2. Find instances of `919876543210` (or `+919876543210`).
-3. Replace them with your actual WhatsApp business number (with country code, e.g. `91XXXXXXXXXX`).
+Your WhatsApp number is set to: **`+91 70659 15814`** (`917065915814`).
 
 ---
 
