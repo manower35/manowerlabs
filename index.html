@@ -259,7 +259,7 @@
         </a>
         <a href="#services" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold text-sm border border-gray-700 transition-all">
           <i data-lucide="layers" class="w-5 h-5"></i>
-          <span>Explore 6 Core Solutions</span>
+          <span>Explore Solutions &amp; Agents</span>
         </a>
       </div>
 
@@ -309,6 +309,10 @@
         <button onclick="switchDemo('lookup')" id="tab-btn-lookup" class="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 flex items-center space-x-2">
           <i data-lucide="search" class="w-4 h-4"></i>
           <span>3. Customer Auto-Lookup</span>
+        </button>
+        <button onclick="switchDemo('alteration')" id="tab-btn-alteration" class="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 flex items-center space-x-2">
+          <i data-lucide="scissors" class="w-4 h-4"></i>
+          <span>4. Bespoke Tailoring &amp; Alteration ERP</span>
         </button>
       </div>
 
@@ -493,6 +497,67 @@
           </table>
         </div>
       </div>
+
+      <!-- DEMO 4: Bespoke Tailoring & Alteration Operations Sandbox -->
+      <div id="demo-alteration" class="glass-card rounded-2xl p-6 sm:p-8 max-w-4xl mx-auto hidden glow-green">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-gray-700 gap-4">
+          <div>
+            <span class="text-xs px-2.5 py-0.5 rounded bg-amber-950 text-amber-400 font-mono border border-amber-800">ATELIER STUDIO ERP</span>
+            <h3 class="text-lg font-bold text-white mt-1">Bespoke Tailoring, Alteration Slips &amp; Shop-Floor PWA</h3>
+          </div>
+          <div class="text-xs text-gray-400">Local-First Desktop App + Mobile Cutter PWA</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6 text-sm">
+          <div class="bg-gray-900/80 p-4 rounded-xl border border-gray-800">
+            <div class="flex items-center space-x-2 text-amber-400 font-bold mb-2">
+              <i data-lucide="printer" class="w-4 h-4"></i>
+              <span>4-in-1 A4 Slip Printer</span>
+            </div>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Batch generates high-resolution bespoke alteration slips formatted for fast, zero-waste thermal or 4-per-A4 paper printing.
+            </p>
+          </div>
+
+          <div class="bg-gray-900/80 p-4 rounded-xl border border-gray-800">
+            <div class="flex items-center space-x-2 text-emerald-400 font-bold mb-2">
+              <i data-lucide="smartphone" class="w-4 h-4"></i>
+              <span>Shop-Floor Cutter PWA</span>
+            </div>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Master cutters and stitchers view real-time garment dimensions (chest, sleeves, posture, lapel) on mobile browsers over local Wi-Fi.
+            </p>
+          </div>
+
+          <div class="bg-gray-900/80 p-4 rounded-xl border border-gray-800">
+            <div class="flex items-center space-x-2 text-cyan-400 font-bold mb-2">
+              <i data-lucide="receipt" class="w-4 h-4"></i>
+              <span>Offline Billing &amp; Registry</span>
+            </div>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Instant tax invoice and retail receipt generation with complete local customer measurement histories and zero recurring SaaS costs.
+            </p>
+          </div>
+        </div>
+
+        <!-- Direct Live Action Links -->
+        <div class="bg-gradient-to-r from-stone-900 via-dark-900 to-stone-900 p-5 rounded-xl border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="text-xs text-gray-300">
+            <span class="font-bold text-white block text-sm mb-0.5">Explore Working Prototype</span>
+            <span>Interactive client demonstration with synthetic showroom data.</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+            <a href="alteration/index.html" target="_blank" rel="noopener" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs shadow-md transition-all hover:scale-105">
+              <i data-lucide="external-link" class="w-4 h-4"></i>
+              <span>Launch Desktop Web ERP</span>
+            </a>
+            <a href="alteration/mobile_app.html" target="_blank" rel="noopener" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 font-semibold text-xs transition-all">
+              <i data-lucide="smartphone" class="w-4 h-4"></i>
+              <span>Open Mobile Cutter App</span>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -616,6 +681,20 @@
         </p>
         <div class="text-xs text-brand-500 font-semibold flex items-center space-x-1">
           <span>Key Benefit: Attracts walk-in and wholesale trade buyers</span>
+        </div>
+      </div>
+
+      <!-- Card 7: Bespoke Apparel & Alteration ERP -->
+      <div class="glass-card p-6 rounded-2xl hover:border-amber-500/50 transition-all hover:-translate-y-1 border border-amber-500/30">
+        <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-5">
+          <i data-lucide="scissors" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">7. Bespoke Tailoring &amp; Alteration ERP</h3>
+        <p class="text-gray-400 text-sm leading-relaxed mb-4">
+          Local-first operations software for luxury ateliers and custom garment makers. 4-in-1 printable alteration slips, shop-floor mobile cutter apps, customer measurement histories, and GST billing.
+        </p>
+        <div class="text-xs text-amber-400 font-semibold flex items-center space-x-1">
+          <span>Key Benefit: Eliminates measurement errors &amp; manual paper slips</span>
         </div>
       </div>
     </div>
@@ -846,7 +925,7 @@
 
     // Tab switcher between demos
     function switchDemo(demoName) {
-      ['logistics', 'catalog', 'lookup'].forEach(name => {
+      ['logistics', 'catalog', 'lookup', 'alteration'].forEach(name => {
         const demoEl = document.getElementById('demo-' + name);
         const tabBtn = document.getElementById('tab-btn-' + name);
         if (name === demoName) {

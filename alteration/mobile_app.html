@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TailorPro - Digital Alteration & Job Sheet App</title>
+<!-- Tailwind CSS for modern mobile-first styling -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  body {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  input, select, textarea {
+    user-select: text;
+  }
+  @media print {
+    .no-print { display: none !important; }
+    .print-only { display: block !important; }
+    body { background: white; padding: 0; }
+  }
+  .print-only { display: none; }
+</style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex flex-col pb-20 md:pb-0">
+
+  <!-- Top Navbar -->
+  <header class="bg-indigo-700 text-white sticky top-0 z-30 shadow-md px-4 py-3 flex items-center justify-between no-print">
+    <div class="flex items-center space-x-2">
+      <i class="fa-solid fa-scissors text-yellow-400 text-xl"></i>
+      <h1 class="text-lg font-bold tracking-wide">TailorPro <span class="text-xs font-normal bg-indigo-800 px-2 py-0.5 rounded">Job Sheet</span></h1>
+    </div>
+    <div class="flex items-center space-x-3 text-sm">
+      <button onclick="switchTab('new-order')" class="bg-yellow-400 text-indigo-900 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center shadow active:scale-95 transition">
+        <i class="fa-solid fa-plus mr-1"></i> New Job
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-4xl w-full mx-auto p-3 sm:p-5 no-print">
+
+    <!-- Tab 1: Orders Dashboard -->
+    <section id="tab-orders" class="space-y-4">
+      <!-- Search & Filters -->
+      <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200 flex items-center space-x-2">
+        <i class="fa-solid fa-magnifying-glass text-gray-400 pl-2"></i>
+        <input type="text" id="search-input" oninput="renderOrders()" placeholder="Search by customer name, bill #, phone..." class="w-full text-sm bg-transparent outline-none py-1">
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="bg-white p-2.5 rounded-xl border border-gray-200 shadow-sm">
+          <div id="stat-total" class="text-lg font-bold text-indigo-700">0</div>
+          <div class="text-[10px] uppercase font-semibold text-gray-500">Total Jobs</div>
+        </div>
+        <div class="bg-white p-2.5 rounded-xl border border-gray-200 shadow-sm">
+          <div id="stat-pending" class="text-lg font-bold text-amber-600">0</div>
+          <div class="text-[10px] uppercase font-semibold text-gray-500">Cutting/Stitch</div>
+        </div>
+        <div class="bg-white p-2.5 rounded-xl border border-gray-200 shadow-sm">
+          <div id="stat-ready" class="text-lg font-bold text-emerald-600">0</div>
+          <div class="text-[10px] uppercase font-semibold text-gray-500">Ready/Delivered</div>
+        </div>
+      </div>
+
+      <!-- Orders List Header -->
+      <div class="flex items-center justify-between pt-2">
+        <h2 class="font-bold text-gray-700 text-sm flex items-center">
+          <i class="fa-solid fa-clipboard-list mr-2 text-indigo-600"></i> Recent Alteration Sheets
+        </h2>
+        <span id="order-count" class="text-xs text-gray-500">0 orders</span>
+      </div>
+
+      <!-- Orders Cards Container -->
+      <div id="orders-list" class="space-y-3">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- Tab 2: New / Edit Order Form -->
+    <section id="tab-new-order" class="hidden space-y-4">
+      <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-200">
+        <div class="flex items-center justify-between border-b pb-3 mb-4">
+          <h2 class="font-bold text-gray-800 text-base flex items-center">
+            <i class="fa-solid fa-file-signature mr-2 text-indigo-600"></i>
+            <span id="form-title">Create Job Sheet</span>
+          </h2>
+          <button onclick="switchTab('orders')" class="text-gray-400 hover:text-gray-600 text-sm">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <form id="jobsheet-form" onsubmit="saveOrder(event)" class="space-y-4">
+          <input type="hidden" id="order-id">
+
+          <!-- Bill & Client Details -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Bill No. *</label>
+              <input type="text" id="form-bill" required class="w-full text-sm border rounded-lg p-2 font-bold text-red-600 bg-gray-50 focus:bg-white focus:border-indigo-500 outline-none" placeholder="e.g. 2805">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Date</label>
+              <input type="date" id="form-date" class="w-full text-sm border rounded-lg p-2 bg-gray-50 focus:bg-white focus:border-indigo-500 outline-none">
+            </div>
+            <div class="col-span-2">
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Customer Name *</label>
+              <input type="text" id="form-name" required class="w-full text-sm border rounded-lg p-2 font-medium bg-gray-50 focus:bg-white focus:border-indigo-500 outline-none" placeholder="Full name">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Phone / Cell</label>
+              <input type="tel" id="form-phone" class="w-full text-sm border rounded-lg p-2 bg-gray-50 focus:bg-white focus:border-indigo-500 outline-none" placeholder="10-digit mobile">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">C/o / Group Ref</label>
+              <input type="text" id="form-co" class="w-full text-sm border rounded-lg p-2 bg-gray-50 focus:bg-white focus:border-indigo-500 outline-none" placeholder="e.g. C/o Ayad">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Garment Style</label>
+              <select id="form-style" class="w-full text-sm border rounded-lg p-2 bg-gray-50 focus:bg-white focus:border-indigo-500 outline-none">
+                <option value="Kurta">Kurta</option>
+                <option value="Kurta + Trouser">Kurta + Trouser</option>
+                <option value="Sherwani">Sherwani</option>
+                <option value="Suit (Coat + Pant)">Suit (Coat + Pant)</option>
+                <option value="Shirt + Trouser">Shirt + Trouser</option>
+                <option value="Pajama Only">Pajama Only</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Upper Body Measurements -->
+          <div class="border-t pt-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-700 mb-2 flex items-center">
+              <i class="fa-solid fa-shirt mr-1.5"></i> Upper Body Measurements (Inches)
+            </h3>
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center">
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">1. Length</label>
+                <input type="text" id="m-length" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="44">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">2. Shoulder</label>
+                <input type="text" id="m-shoulder" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="18.5">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">3. Sleeves</label>
+                <input type="text" id="m-sleeves" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="24">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">4. Chest</label>
+                <input type="text" id="m-chest" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="43.5">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">5. Neck</label>
+                <input type="text" id="m-neck" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="17">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">8. Stomach</label>
+                <input type="text" id="m-stomach" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="42.5">
+              </div>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center mt-2">
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">11. Hips (Top)</label>
+                <input type="text" id="m-hips" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="44">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">24. Armhole</label>
+                <input type="text" id="m-armhole" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="22">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">25. Arms (Bicep)</label>
+                <input type="text" id="m-arms" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="15.5">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">Cutter Code</label>
+                <input type="text" id="m-cutter" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="24-18">
+              </div>
+            </div>
+          </div>
+
+          <!-- Lower Body Measurements -->
+          <div class="border-t pt-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-700 mb-2 flex items-center">
+              <i class="fa-solid fa-person-walking mr-1.5"></i> Lower Body / Trouser (Inches)
+            </h3>
+            <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 text-center">
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">9. Pant Length</label>
+                <input type="text" id="m-pant-length" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="38">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">10. Waist</label>
+                <input type="text" id="m-waist" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="42">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">12. Thighs</label>
+                <input type="text" id="m-thighs" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="29.5">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">13. Seat</label>
+                <input type="text" id="m-seat" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="31.5">
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-500 mb-0.5">15. Bottom (Mori)</label>
+                <input type="text" id="m-bottom" class="w-full text-sm text-center border rounded-md p-1.5 font-semibold bg-gray-50 focus:bg-white outline-none" placeholder="14.5">
+              </div>
+            </div>
+          </div>
+
+          <!-- Workshop & Billing Notes -->
+          <div class="border-t pt-3 grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Status</label>
+              <select id="form-status" class="w-full text-sm border rounded-lg p-2 bg-gray-50 font-medium">
+                <option value="Measurement Taken">Measurement Taken</option>
+                <option value="Cutting">Cutting</option>
+                <option value="Stitching">Stitching</option>
+                <option value="Trial Ready">Trial Ready</option>
+                <option value="Delivered">Delivered</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Trial / Del. Date</label>
+              <input type="date" id="form-trial-date" class="w-full text-sm border rounded-lg p-2 bg-gray-50">
+            </div>
+            <div class="col-span-2">
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Fabric & Alteration Instructions</label>
+              <input type="text" id="form-notes" class="w-full text-sm border rounded-lg p-2 bg-gray-50" placeholder="e.g. Black Lycra fabric, loose armholes">
+            </div>
+          </div>
+
+          <!-- Submit Buttons -->
+          <div class="pt-3 flex space-x-3">
+            <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl shadow active:scale-98 transition text-sm">
+              <i class="fa-solid fa-check mr-1.5"></i> Save Job Sheet
+            </button>
+            <button type="button" onclick="switchTab('orders')" class="px-5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2.5 rounded-xl text-sm">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Tab 3: Scan / Upload PDF or Image -->
+    <section id="tab-upload" class="hidden space-y-4">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 text-center">
+        <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+          <i class="fa-solid fa-file-arrow-up"></i>
+        </div>
+        <h2 class="font-bold text-gray-800 text-base mb-1">Upload Jobsheet (PDF or Photo)</h2>
+        <p class="text-xs text-gray-500 max-w-sm mx-auto mb-4">
+          Capture paper alteration forms with your mobile camera or upload desktop PDF/image files.
+        </p>
+
+        <label class="inline-flex items-center justify-center bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm cursor-pointer shadow active:scale-95 transition">
+          <i class="fa-solid fa-camera mr-2"></i> Choose File / Take Photo
+          <input type="file" accept="image/*,.pdf" class="hidden" onchange="handleFileUpload(event)">
+        </label>
+
+        <div id="upload-preview" class="mt-4 hidden p-3 border rounded-xl bg-gray-50 text-left">
+          <div class="text-xs font-bold text-gray-700 mb-2">Uploaded Preview:</div>
+          <img id="preview-img" class="max-h-64 mx-auto rounded-lg shadow-sm border object-contain">
+          <div id="preview-filename" class="text-center text-xs text-gray-500 mt-2"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Single Slip Print View (Hidden on screen, active on print) -->
+  <div id="print-area" class="print-only p-4 font-sans">
+    <!-- Populated dynamically when clicking Print -->
+  </div>
+
+  <!-- Bottom Mobile Navigation Bar -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg px-6 py-2 flex justify-around items-center z-40 md:hidden no-print">
+    <button onclick="switchTab('orders')" id="nav-btn-orders" class="flex flex-col items-center text-indigo-600 font-bold text-[11px]">
+      <i class="fa-solid fa-table-list text-lg mb-0.5"></i>
+      Orders
+    </button>
+    <button onclick="switchTab('new-order')" id="nav-btn-new" class="flex flex-col items-center text-gray-400 hover:text-indigo-600 text-[11px]">
+      <i class="fa-solid fa-plus-circle text-2xl text-indigo-600 -mt-3 mb-0.5 bg-white rounded-full shadow"></i>
+      New Job
+    </button>
+    <button onclick="switchTab('upload')" id="nav-btn-upload" class="flex flex-col items-center text-gray-400 hover:text-indigo-600 text-[11px]">
+      <i class="fa-solid fa-file-arrow-up text-lg mb-0.5"></i>
+      Upload/Scan
+    </button>
+  </nav>
+
+  <script>
+    // Initial Seed Data for Demo
+    const defaultOrders = [
+      {
+        id: '1', bill: 'AT-3101', date: '2026-09-04', name: 'Bespoke Client A', phone: '', co: 'Studio Batch',
+        style: 'Bespoke Tuxedo & Trouser', status: 'Trial Ready', trialDate: '2026-09-12', notes: 'Peak Lapel, Italian Wool',
+        length: '44', shoulder: '19.5', sleeves: '25.5', chest: '46', neck: '18', stomach: '41',
+        hips: '44', pantLength: '39.5', waist: '38', thighs: '27', seat: '31', bottom: '14.5', armhole: '23.5', arms: '16.5', cutter: 'C-01'
+      },
+      {
+        id: '2', bill: 'AT-3102', date: '2026-09-05', name: 'Bespoke Client B', phone: '', co: 'Wedding Entourage',
+        style: 'Royal Sherwani & Churidar', status: 'Cutting', trialDate: '2026-09-15', notes: 'Raw Silk & Zari Embroidery',
+        length: '48', shoulder: '19', sleeves: '26', chest: '44', neck: '17.5', stomach: '39',
+        hips: '43', pantLength: '40', waist: '36', thighs: '26', seat: '29', bottom: '12', armhole: '22.5', arms: '16', cutter: 'C-02'
+      },
+      {
+        id: '3', bill: 'AT-3103', date: '2026-09-05', name: 'Bespoke Client C', phone: '', co: 'VIP Styling',
+        style: 'Regal Bandhgala Jacket', status: 'Stitching', trialDate: '2026-09-14', notes: 'Heritage Micro-Velvet',
+        length: '42', shoulder: '18', sleeves: '24.5', chest: '40', neck: '16.5', stomach: '35',
+        hips: '39', pantLength: '38', waist: '32', thighs: '24', seat: '27', bottom: '14', armhole: '21', arms: '15', cutter: 'C-01'
+      },
+      {
+        id: '4', bill: 'AT-3104', date: '2026-09-06', name: 'Bespoke Client D', phone: '', co: 'Celebration Batch',
+        style: 'Indo-Western Asymmetric Top', status: 'Order Logged', trialDate: '2026-09-18', notes: 'Matte Jacquard Silk',
+        length: '45', shoulder: '20', sleeves: '26.5', chest: '48', neck: '18.5', stomach: '44',
+        hips: '47', pantLength: '41', waist: '42', thighs: '28.5', seat: '32', bottom: '15', armhole: '24', arms: '17.5', cutter: 'C-03'
+      }
+    ];
+
+    // Load from localStorage or use defaults
+    let orders = JSON.parse(localStorage.getItem('tailor_orders')) || defaultOrders;
+
+    function saveToStorage() {
+      localStorage.setItem('tailor_orders', JSON.stringify(orders));
+      renderOrders();
+    }
+
+    function switchTab(tab) {
+      document.getElementById('tab-orders').classList.add('hidden');
+      document.getElementById('tab-new-order').classList.add('hidden');
+      document.getElementById('tab-upload').classList.add('hidden');
+      
+      document.getElementById('tab-' + tab).classList.remove('hidden');
+
+      // Update mobile nav highlight
+      const navBtns = ['orders', 'new', 'upload'];
+      navBtns.forEach(b => {
+        const el = document.getElementById('nav-btn-' + b);
+        if (el) {
+          if ((tab === 'orders' && b === 'orders') || (tab === 'new-order' && b === 'new') || (tab === 'upload' && b === 'upload')) {
+            el.className = 'flex flex-col items-center text-indigo-600 font-bold text-[11px]';
+          } else {
+            el.className = 'flex flex-col items-center text-gray-400 hover:text-indigo-600 text-[11px]';
+          }
+        }
+      });
+
+      if (tab === 'new-order' && !document.getElementById('order-id').value) {
+        document.getElementById('form-title').innerText = 'Create Job Sheet';
+        document.getElementById('jobsheet-form').reset();
+        document.getElementById('form-date').valueAsDate = new Date();
+        document.getElementById('form-bill').value = '280' + (orders.length + 1);
+      }
+    }
+
+    function renderOrders() {
+      const q = (document.getElementById('search-input').value || '').toLowerCase();
+      const listEl = document.getElementById('orders-list');
+      listEl.innerHTML = '';
+
+      const filtered = orders.filter(o => 
+        o.name.toLowerCase().includes(q) || 
+        o.bill.toLowerCase().includes(q) || 
+        (o.phone && o.phone.includes(q)) ||
+        (o.co && o.co.toLowerCase().includes(q))
+      );
+
+      // Update Stats
+      document.getElementById('stat-total').innerText = orders.length;
+      document.getElementById('stat-pending').innerText = orders.filter(o => o.status === 'Cutting' || o.status === 'Stitching').length;
+      document.getElementById('stat-ready').innerText = orders.filter(o => o.status === 'Trial Ready' || o.status === 'Delivered').length;
+      document.getElementById('order-count').innerText = `${filtered.length} order${filtered.length === 1 ? '' : 's'}`;
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div class="bg-white p-6 rounded-xl border text-center text-gray-400 text-xs">No orders found.</div>`;
+        return;
+      }
+
+      filtered.forEach(o => {
+        const badgeColor = 
+          o.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :
+          o.status === 'Trial Ready' ? 'bg-blue-100 text-blue-800' :
+          o.status === 'Stitching' ? 'bg-purple-100 text-purple-800' : 'bg-amber-100 text-amber-800';
+
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-xl p-3.5 shadow-sm border border-gray-200 flex flex-col space-y-2';
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-extrabold text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-200">#${o.bill}</span>
+                <h3 class="font-bold text-gray-900 text-sm">${o.name}</h3>
+              </div>
+              <div class="text-xs text-gray-500 mt-0.5">
+                ${o.co ? `<span class="font-medium text-indigo-700 mr-2">${o.co}</span>` : ''}
+                ${o.phone ? `<span><i class="fa-solid fa-phone text-[10px]"></i> ${o.phone}</span>` : ''}
+              </div>
+            </div>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeColor}">${o.status}</span>
+          </div>
+
+          <div class="bg-gray-50 rounded-lg p-2 text-xs grid grid-cols-4 gap-1 text-gray-600 border border-gray-100">
+            <div><span class="text-gray-400">Style:</span> <span class="font-semibold text-gray-800">${o.style || 'Kurta'}</span></div>
+            <div><span class="text-gray-400">Len:</span> <span class="font-semibold">${o.length || '-'}</span></div>
+            <div><span class="text-gray-400">Chest:</span> <span class="font-semibold">${o.chest || '-'}</span></div>
+            <div><span class="text-gray-400">Waist:</span> <span class="font-semibold">${o.waist || '-'}</span></div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <span class="text-gray-400 text-[11px]">${o.notes || 'Standard fitting'}</span>
+            <div class="flex space-x-2">
+              <button onclick="printJobSheet('${o.id}')" class="text-gray-600 hover:text-indigo-600 p-1 font-semibold flex items-center">
+                <i class="fa-solid fa-print mr-1"></i> Print
+              </button>
+              <button onclick="editOrder('${o.id}')" class="text-indigo-600 hover:text-indigo-800 p-1 font-semibold flex items-center">
+                <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+              </button>
+              <button onclick="deleteOrder('${o.id}')" class="text-red-500 hover:text-red-700 p-1">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    function saveOrder(e) {
+      e.preventDefault();
+      const id = document.getElementById('order-id').value || String(Date.now());
+      const newObj = {
+        id: id,
+        bill: document.getElementById('form-bill').value,
+        date: document.getElementById('form-date').value,
+        name: document.getElementById('form-name').value,
+        phone: document.getElementById('form-phone').value,
+        co: document.getElementById('form-co').value,
+        style: document.getElementById('form-style').value,
+        status: document.getElementById('form-status').value,
+        trialDate: document.getElementById('form-trial-date').value,
+        notes: document.getElementById('form-notes').value,
+        length: document.getElementById('m-length').value,
+        shoulder: document.getElementById('m-shoulder').value,
+        sleeves: document.getElementById('m-sleeves').value,
+        chest: document.getElementById('m-chest').value,
+        neck: document.getElementById('m-neck').value,
+        stomach: document.getElementById('m-stomach').value,
+        hips: document.getElementById('m-hips').value,
+        pantLength: document.getElementById('m-pant-length').value,
+        waist: document.getElementById('m-waist').value,
+        thighs: document.getElementById('m-thighs').value,
+        seat: document.getElementById('m-seat').value,
+        bottom: document.getElementById('m-bottom').value,
+        armhole: document.getElementById('m-armhole').value,
+        arms: document.getElementById('m-arms').value,
+        cutter: document.getElementById('m-cutter').value
+      };
+
+      const idx = orders.findIndex(o => o.id === id);
+      if (idx >= 0) {
+        orders[idx] = newObj;
+      } else {
+        orders.unshift(newObj);
+      }
+
+      saveToStorage();
+      switchTab('orders');
+    }
+
+    function editOrder(id) {
+      const o = orders.find(x => x.id === id);
+      if (!o) return;
+      document.getElementById('order-id').value = o.id;
+      document.getElementById('form-title').innerText = 'Edit Job Sheet #' + o.bill;
+      document.getElementById('form-bill').value = o.bill || '';
+      document.getElementById('form-date').value = o.date || '';
+      document.getElementById('form-name').value = o.name || '';
+      document.getElementById('form-phone').value = o.phone || '';
+      document.getElementById('form-co').value = o.co || '';
+      document.getElementById('form-style').value = o.style || 'Kurta';
+      document.getElementById('form-status').value = o.status || 'Cutting';
+      document.getElementById('form-trial-date').value = o.trialDate || '';
+      document.getElementById('form-notes').value = o.notes || '';
+      
+      document.getElementById('m-length').value = o.length || '';
+      document.getElementById('m-shoulder').value = o.shoulder || '';
+      document.getElementById('m-sleeves').value = o.sleeves || '';
+      document.getElementById('m-chest').value = o.chest || '';
+      document.getElementById('m-neck').value = o.neck || '';
+      document.getElementById('m-stomach').value = o.stomach || '';
+      document.getElementById('m-hips').value = o.hips || '';
+      document.getElementById('m-pantLength' || 'm-pant-length').value = o.pantLength || '';
+      document.getElementById('m-waist').value = o.waist || '';
+      document.getElementById('m-thighs').value = o.thighs || '';
+      document.getElementById('m-seat').value = o.seat || '';
+      document.getElementById('m-bottom').value = o.bottom || '';
+      document.getElementById('m-armhole').value = o.armhole || '';
+      document.getElementById('m-arms').value = o.arms || '';
+      document.getElementById('m-cutter').value = o.cutter || '';
+
+      switchTab('new-order');
+    }
+
+    function deleteOrder(id) {
+      if (confirm('Delete this alteration jobsheet?')) {
+        orders = orders.filter(o => o.id !== id);
+        saveToStorage();
+      }
+    }
+
+    function printJobSheet(id) {
+      const o = orders.find(x => x.id === id);
+      if (!o) return;
+      const printEl = document.getElementById('print-area');
+      printEl.innerHTML = `
+        <div style="border: 2px solid #000; padding: 15px; max-width: 480px; margin: 0 auto; font-family: Arial, sans-serif;">
+          <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 8px;">
+            <h2 style="margin: 0; font-size: 16px; text-transform: uppercase; font-weight: bold;">ALTERATION INSTRUCTIONS</h2>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px;">
+            <div><strong>Bill No:</strong> <span style="color: red; font-weight: bold;">#${o.bill}</span></div>
+            <div><strong>Date:</strong> ${o.date || new Date().toISOString().slice(0,10)}</div>
+          </div>
+          <div style="font-size: 12px; margin-bottom: 4px;"><strong>Customer:</strong> ${o.name}</div>
+          <div style="font-size: 11px; margin-bottom: 6px;"><strong>C/o:</strong> ${o.co || '-'} | <strong>Phone:</strong> ${o.phone || '-'}</div>
+          <div style="font-size: 11px; margin-bottom: 8px;"><strong>Garment:</strong> ${o.style} | <strong>Fabric/Note:</strong> ${o.notes || '-'}</div>
+          
+          <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 10px;" border="1">
+            <thead>
+              <tr style="background: #f0f0f0;"><th>Parameter</th><th>Size</th><th>Parameter</th><th>Size</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1. Length</td><td><strong>${o.length || '-'}</strong></td><td>9. Pant Len</td><td><strong>${o.pantLength || '-'}</strong></td></tr>
+              <tr><td>2. Shoulder</td><td><strong>${o.shoulder || '-'}</strong></td><td>10. Waist</td><td><strong>${o.waist || '-'}</strong></td></tr>
+              <tr><td>3. Sleeves</td><td><strong>${o.sleeves || '-'}</strong></td><td>11. Hips</td><td><strong>${o.hips || '-'}</strong></td></tr>
+              <tr><td>4. Chest</td><td><strong>${o.chest || '-'}</strong></td><td>12. Thighs</td><td><strong>${o.thighs || '-'}</strong></td></tr>
+              <tr><td>5. Neck</td><td><strong>${o.neck || '-'}</strong></td><td>13. Seat</td><td><strong>${o.seat || '-'}</strong></td></tr>
+              <tr><td>8. Stomach</td><td><strong>${o.stomach || '-'}</strong></td><td>15. Bottom</td><td><strong>${o.bottom || '-'}</strong></td></tr>
+              <tr><td>24. Armhole</td><td><strong>${o.armhole || '-'}</strong></td><td>Cutter</td><td><strong>${o.cutter || '-'}</strong></td></tr>
+            </tbody>
+          </table>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; border-top: 1px solid #000; padding-top: 6px;">
+            <div>Cutter Sign: ____________</div>
+            <div>Tailor Sign: ____________</div>
+          </div>
+        </div>
+      `;
+      window.print();
+    }
+
+    function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('upload-preview').classList.remove('hidden');
+      document.getElementById('preview-filename').innerText = `Loaded: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('preview-img').src = evt.target.result;
+          document.getElementById('preview-img').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      } else {
+        document.getElementById('preview-img').classList.add('hidden');
+      }
+    }
+
+    // Init
+    renderOrders();
+  </script>
+</body>
+</html>

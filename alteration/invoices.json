@@ -1,0 +1,80 @@
+[
+  {
+    "id": "inv_301",
+    "invoiceNo": "INV-7801",
+    "date": "2026-09-04",
+    "deliveryDate": "2026-09-12",
+    "salesman": "STUDIO",
+    "storeGstin": "",
+    "customerName": "Bespoke Client A",
+    "customerPhone": "",
+    "customerGstin": "",
+    "items": [
+      {
+        "sno": 1,
+        "productCode": "TX-900",
+        "qty": 1,
+        "description": "Bespoke Midnight Charcoal Tuxedo Suit",
+        "unitPrice": 48500,
+        "total": 48500
+      },
+      {
+        "sno": 2,
+        "productCode": "SH-100",
+        "qty": 2,
+        "description": "Handcrafted Egyptian Giza Cotton Tuxedo Shirts",
+        "unitPrice": 4500,
+        "total": 9000
+      }
+    ],
+    "subtotal": 57500,
+    "discount": 2500,
+    "taxableAmount": 55000,
+    "gstRate": 5,
+    "gstAmount": 2750,
+    "grandTotal": 57750,
+    "advancePaid": 30000,
+    "balanceDue": 27750,
+    "paymentStatus": "Advance Received",
+    "paymentMode": "Card / Online"
+  },
+  {
+    "id": "inv_302",
+    "invoiceNo": "INV-7802",
+    "date": "2026-09-05",
+    "deliveryDate": "2026-09-15",
+    "salesman": "STUDIO",
+    "storeGstin": "",
+    "customerName": "Bespoke Client B",
+    "customerPhone": "",
+    "customerGstin": "",
+    "items": [
+      {
+        "sno": 1,
+        "productCode": "SHW-200",
+        "qty": 1,
+        "description": "Heritage Raw Silk Zari Embroidered Royal Sherwani",
+        "unitPrice": 72000,
+        "total": 72000
+      },
+      {
+        "sno": 2,
+        "productCode": "ST-50",
+        "qty": 1,
+        "description": "Hand-dyed Silk Stole with Zardozi Borders",
+        "unitPrice": 8500,
+        "total": 8500
+      }
+    ],
+    "subtotal": 80500,
+    "discount": 3500,
+    "taxableAmount": 77000,
+    "gstRate": 5,
+    "gstAmount": 3850,
+    "grandTotal": 80850,
+    "advancePaid": 80850,
+    "balanceDue": 0,
+    "paymentStatus": "Fully Paid",
+    "paymentMode": "Bank Transfer"
+  }
+]

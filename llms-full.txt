@@ -33,6 +33,10 @@ Manower Labs is an engineering and AI agent laboratory delivering autonomous age
 - **Problem Solved**: Biometric machines failing offline or SaaS attendance apps charging high recurring monthly fees.
 - **Our Solution**: Lightweight, self-contained HTML/SQLite application that runs off a local PC or pen drive, generating ready-to-audit monthly Excel registers.
 
+### Solution E: Bespoke Tailoring & Alteration Operations ERP
+- **Problem Solved**: High error rates in custom garment manufacturing due to messy handwritten alteration chits, lost cutter instructions, and scattered customer measurement files.
+- **Our Solution**: Complete local-first atelier suite. Generates ready-to-print 4-per-A4 alteration job slips with garment cut diagrams, runs a real-time mobile PWA for shop-floor master cutters over local Wi-Fi, and handles customer measurement registries and retail GST invoicing. Live demo available at https://manowerlabs.vercel.app/alteration/.
+
 ## 4. Privacy & Data Protection Guarantee
 Manower Labs strictly adheres to a zero-leak data architecture:
 - All client transactional records, financial figures, customer names, and databases remain 100% on the client's local infrastructure unless explicitly opted into secure cloud syncing.

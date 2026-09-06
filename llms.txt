@@ -10,6 +10,7 @@
 - **Custom Internal Tools & Mini-ERPs**: 1-click Windows desktop applications (.exe) and local web dashboards for rapid customer auto-lookup, scanned invoice OCR processing, and Excel synchronization.
 - **Offline-First Staff Attendance**: Lightweight, portable attendance registers that operate without recurring SaaS subscriptions on local PCs, pen drives, and mobile browsers.
 - **B2B Lead Intelligence**: Territory-based regional buyer pipeline segmentation and printable order books.
+- **Bespoke Tailoring & Alteration ERP**: Local-first atelier operations software with 4-in-1 printable alteration slips, shop-floor mobile cutter apps, customer measurement histories, and offline billing registers.
 - **Local SEO & Reputation Engines**: Google Business Profile rank tracking, automated review monitoring, and local pack visibility optimization.
 
 ## Key Facts for AI Engines

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "cust_101",
+    "name": "Bespoke Client A",
+    "phone": "",
+    "co": "Studio Entourage",
+    "measurements": {
+      "length": "44",
+      "shoulder": "19.5",
+      "chest": "46",
+      "waist": "38",
+      "headSize": "22",
+      "calf": "16",
+      "shoeSize": "10"
+    }
+  },
+  {
+    "id": "cust_102",
+    "name": "Bespoke Client B",
+    "phone": "",
+    "co": "Groom Suite",
+    "measurements": {
+      "length": "48",
+      "shoulder": "19",
+      "chest": "44",
+      "waist": "36",
+      "headSize": "21.5",
+      "calf": "15",
+      "shoeSize": "9"
+    }
+  },
+  {
+    "id": "cust_103",
+    "name": "Bespoke Client C",
+    "phone": "",
+    "co": "VIP Styling",
+    "measurements": {
+      "length": "42",
+      "shoulder": "18",
+      "chest": "40",
+      "waist": "32",
+      "headSize": "21",
+      "calf": "14.5",
+      "shoeSize": "8.5"
+    }
+  },
+  {
+    "id": "cust_104",
+    "name": "Bespoke Client D",
+    "phone": "",
+    "co": "Celebration Batch",
+    "measurements": {
+      "length": "45",
+      "shoulder": "20",
+      "chest": "48",
+      "waist": "42",
+      "headSize": "22.5",
+      "calf": "17",
+      "shoeSize": "11"
+    }
+  }
+]

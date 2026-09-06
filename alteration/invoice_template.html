@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Atelier Bespoke - Tax Invoice & Bill Format</title>
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  body {
+    font-family: Arial, sans-serif;
+    color: #000;
+    margin: 0;
+    padding: 10px;
+    background: #f5f5f5;
+  }
+  .bill-container {
+    max-width: 780px;
+    margin: 0 auto;
+    background: #fff;
+    border: 2px solid #8b0000;
+    padding: 15px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  .bill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #8b0000;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+  .brand-section {
+    width: 50%;
+  }
+  .brand-name {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #8b0000;
+    text-transform: uppercase;
+  }
+  .brand-sub {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #a0522d;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .brand-address {
+    font-size: 10px;
+    line-height: 1.3;
+    color: #333;
+  }
+  .brand-contact {
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 3px;
+  }
+  .meta-section {
+    width: 45%;
+    text-align: right;
+    font-size: 11px;
+  }
+  .meta-box {
+    border: 1px solid #8b0000;
+    border-radius: 4px;
+    padding: 6px;
+    background: #fffafa;
+    text-align: left;
+    display: inline-block;
+    min-width: 200px;
+  }
+  .meta-box table {
+    width: 100%;
+    font-size: 11px;
+  }
+  .meta-box td {
+    padding: 2px 4px;
+  }
+  .meta-box .bill-no {
+    color: #b91c1c;
+    font-weight: 900;
+    font-size: 14px;
+  }
+  .gstin-banner {
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    background: #8b0000;
+    color: #fff;
+    padding: 3px 0;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  .items-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  .items-table th {
+    background: #8b0000;
+    color: white;
+    border: 1px solid #8b0000;
+    padding: 6px 4px;
+    text-align: center;
+  }
+  .items-table td {
+    border: 1px solid #d1d5db;
+    padding: 6px 4px;
+  }
+  .totals-section {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  .customer-box {
+    width: 55%;
+    border: 1.5px solid #8b0000;
+    border-radius: 4px;
+    padding: 8px;
+    background: #fffafa;
+  }
+  .calc-box {
+    width: 40%;
+    border-collapse: collapse;
+  }
+  .calc-box td {
+    padding: 3px 4px;
+  }
+  .grand-total-row {
+    font-size: 14px;
+    font-weight: 900;
+    color: #8b0000;
+    border-top: 2px solid #8b0000;
+    border-bottom: 2px solid #8b0000;
+    background: #fef2f2;
+  }
+  .credit-card-banner {
+    background: #8b0000;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 3px 0;
+    margin-top: 5px;
+    text-transform: uppercase;
+  }
+  .terms-note {
+    font-size: 8.5px;
+    color: #444;
+    text-align: justify;
+    line-height: 1.2;
+    margin-top: 5px;
+    border-top: 1px dashed #8b0000;
+    padding-top: 4px;
+  }
+  .signatures {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    font-size: 11px;
+    padding-top: 10px;
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .bill-container { border: 2px solid #000; box-shadow: none; max-width: 100%; }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="no-print" style="text-align: center; margin-bottom: 15px; display: flex; justify-content: center; gap: 12px;">
+    <button onclick="setMode('digital'); window.print();" style="background: #8b0000; color: #fff; font-weight: bold; padding: 10px 22px; font-size: 13px; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+      🖨️ Print Full Digital Bill (Plain Paper)
+    </button>
+    <button onclick="setMode('pad'); window.print();" style="background: #f59e0b; color: #1c1917; font-weight: 900; padding: 10px 22px; font-size: 13px; border: 1px solid #d97706; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+      📋 Print on Physical Paper Pad (Hard Copy)
+    </button>
+  </div>
+  <script>
+    function setMode(mode) {
+      if (mode === 'pad') {
+        document.body.classList.add('pad-mode');
+      } else {
+        document.body.classList.remove('pad-mode');
+      }
+    }
+  </script>
+  <style>
+    body.pad-mode .bill-container {
+      border: none !important;
+      box-shadow: none !important;
+    }
+    body.pad-mode .brand-section,
+    body.pad-mode .meta-box td:first-child,
+    body.pad-mode .items-table thead,
+    body.pad-mode .items-table td {
+      border-color: transparent !important;
+    }
+    body.pad-mode .brand-section *,
+    body.pad-mode .credit-card-banner,
+    body.pad-mode .terms-note,
+    body.pad-mode .signatures {
+      visibility: hidden !important;
+    }
+  </style>
+
+  <div class="bill-container">
+    <!-- Header -->
+    <div class="bill-header">
+      <div class="brand-section">
+        <div class="brand-name">ATELIER BESPOKE</div>
+        <div class="brand-sub">HAUTE COUTURE & BESPOKE TAILORING</div>
+        <div class="brand-address">
+          Boutique Atelier Studio
+        </div>
+        <div class="brand-contact">
+          
+        </div>
+      </div>
+
+      <div class="meta-section">
+        <div class="meta-box">
+          <table>
+            <tr>
+              <td><strong>Bill No.:</strong></td>
+              <td class="bill-no">LG450</td>
+            </tr>
+            <tr>
+              <td><strong>S. Code:</strong></td>
+              <td><strong>KAIF</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Date:</strong></td>
+              <td>20-07-2026</td>
+            </tr>
+            <tr>
+              <td><strong>Del. Date:</strong></td>
+              <td style="color: #047857; font-weight: bold;">28-07-2026</td>
+            </tr>
+            <tr>
+              <td><strong>Store GSTIN:</strong></td>
+              <td>36AAIFI6985N1ZG</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items Table (Exact Columns as physical sheet) -->
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th style="width: 35px;">S.No.</th>
+          <th style="width: 110px;">Product Code</th>
+          <th style="width: 45px;">Qty</th>
+          <th>Product Description</th>
+          <th style="width: 95px; text-align: right;">Unit Price (₹)</th>
+          <th style="width: 105px; text-align: right;">Total Price (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: center; font-weight: bold;">1</td>
+          <td style="font-weight: bold; font-family: monospace;">SH6709</td>
+          <td style="text-align: center; font-weight: bold;">1</td>
+          <td style="font-weight: bold;">PEARL SHERWANI SET WITH STOLE</td>
+          <td style="text-align: right;">1,20,000.00</td>
+          <td style="text-align: right; font-weight: bold;">1,20,000.00</td>
+        </tr>
+        <tr>
+          <td style="text-align: center; font-weight: bold;">2</td>
+          <td style="font-weight: bold; font-family: monospace;">SE4046</td>
+          <td style="text-align: center; font-weight: bold;">1</td>
+          <td style="font-weight: bold;">HANDMADE SHOES</td>
+          <td style="text-align: right;">4,500.00</td>
+          <td style="text-align: right; font-weight: bold;">4,500.00</td>
+        </tr>
+        <tr>
+          <td style="text-align: center; font-weight: bold;">3</td>
+          <td style="font-weight: bold; font-family: monospace;">KP0040</td>
+          <td style="text-align: center; font-weight: bold;">1</td>
+          <td style="font-weight: bold;">ZARI KURTA SET WITH STOLE</td>
+          <td style="text-align: right;">27,000.00</td>
+          <td style="text-align: right; font-weight: bold;">27,000.00</td>
+        </tr>
+        <!-- Empty Placeholder rows matching printed voucher lines -->
+        <tr><td style="text-align: center; color: #ccc;">4</td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td style="text-align: center; color: #ccc;">5</td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <!-- Totals & Customer Section -->
+    <div class="totals-section">
+      <div class="customer-box">
+        <div style="font-size: 12px; margin-bottom: 4px;">
+          <span style="color: #8b0000; font-weight: bold; text-transform: uppercase;">ORDER FOR:</span><br>
+          <strong style="font-size: 14px;">MR SANDEEP SINGH SETHI</strong>
+        </div>
+        <div style="margin-bottom: 4px;">
+          <strong>Customer GSTIN:</strong> <span style="font-family: monospace;">33GMGPS9288N1ZW</span>
+        </div>
+        <div style="border-top: 1px solid #8b0000; padding-top: 4px; margin-top: 6px; font-weight: bold;">
+          <span style="color: green;">65,000 PAID</span> &nbsp;|&nbsp; <span style="color: #b91c1c;">71,500 BALANCE</span>
+        </div>
+      </div>
+
+      <table class="calc-box">
+        <tr>
+          <td><strong>Item Total:</strong></td>
+          <td style="text-align: right; font-weight: bold;">1,51,500.00</td>
+        </tr>
+        <tr>
+          <td style="color: #b91c1c;"><strong>SPECIAL DISCOUNT:</strong></td>
+          <td style="text-align: right; font-weight: bold; color: #b91c1c;">- 21,500.00</td>
+        </tr>
+        <tr>
+          <td><strong>GST 5%:</strong></td>
+          <td style="text-align: right; font-weight: bold;">+ 6,500.00</td>
+        </tr>
+        <tr class="grand-total-row">
+          <td>GRAND TOTAL:</td>
+          <td style="text-align: right;">₹1,36,500.00</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Red Banner & Legal Terms matching physical sheet -->
+    <div class="credit-card-banner">
+      ALL MAJOR CREDIT CARDS ACCEPTED
+    </div>
+
+    <div class="terms-note">
+      <strong>NOTE:</strong> In the rare event if you find any slightest manufacturing defect or fault do not hesitate for replacement within 2 days. Goods once sold will not be taken back but can be exchanged with the same range for colour or size at our total discretion. Once bill generated will not be cancelled. <strong>SILK MATERIAL DRY CLEANING ONLY AND NO GUARANTEE.</strong>
+    </div>
+
+    <div class="signatures">
+      <div>Customer Signature: __________________</div>
+      <div>For <strong>ATELIER BESPOKE</strong> (Authorized Signatory)</div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -7,7 +7,7 @@ Modern B2B autonomous AI agents & business operations software website, engineer
 ## 🚀 2-Minute Deployment to GitHub & Vercel
 
 ### Step 1: Initialize Git and Commit
-Open PowerShell in this folder (`c:\Users\attar\Documents\manowerstudio`) and run:
+Open terminal in your project directory and run:
 
 ```bash
 git add .
@@ -55,3 +55,8 @@ Your WhatsApp number is set to: **`+91 70659 15814`** (`917065915814`).
 ### 3. LLM & Generative Engine Optimization (GEO)
 - `llms.txt` and `llms-full.txt` files compliant with the open standard for AI web crawlers (PerplexityBot, GPTBot, ClaudeBot).
 - JSON-LD `FAQPage` and `SoftwareApplication` structured schemas that AI models extract directly for conversational answers.
+
+### 4. Interactive Live Demos & Prototypes
+- `/alteration/`: Live Bespoke Tailoring, Alteration & Billing Workshop ERP.
+- `/alteration/mobile_app.html`: Mobile shop-floor cutter and master tailor job-sheet PWA.
+- Zero backend dependencies required for web viewing; utilizes local storage and synthetic sample data.

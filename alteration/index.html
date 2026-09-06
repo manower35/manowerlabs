@@ -1,0 +1,2614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Atelier Bespoke — Haute Couture Alteration & Billing Workshop</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  body { -webkit-tap-highlight-color: transparent; }
+  .ATELIER-header {
+    background: linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%);
+  }
+  @media print {
+    .no-print { display: none !important; }
+    .print-only { display: block !important; }
+    html, body {
+      background: white !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      height: 100% !important;
+      overflow: hidden !important;
+    }
+    #print-area {
+      width: 100% !important;
+      display: block !important;
+      page-break-inside: avoid !important;
+      page-break-after: avoid !important;
+      page-break-before: avoid !important;
+      break-inside: avoid !important;
+      break-after: avoid !important;
+    }
+    .single-page-sheet {
+      page-break-inside: avoid !important;
+      page-break-after: avoid !important;
+      break-inside: avoid !important;
+      break-after: avoid !important;
+      max-height: 100vh !important;
+      box-sizing: border-box !important;
+    }
+    @page {
+      margin: 5mm;
+      size: A4 portrait;
+    }
+  }
+  .print-only { display: none; }
+</style>
+</head>
+<body class="bg-stone-100 text-stone-900 font-sans min-h-screen flex flex-col pb-20 md:pb-6">
+
+  <!-- Top Luxury Header -->
+  <header class="bg-stone-900 text-white sticky top-0 z-30 shadow-2xl border-b-2 border-amber-500/60 px-3 sm:px-6 py-2.5 flex items-center justify-between no-print">
+    <div class="flex items-center space-x-3">
+      <div class="h-11 bg-white px-2 py-0.5 rounded-xl flex items-center justify-center border border-amber-300 shadow">
+        
+      </div>
+      <div>
+        <div class="flex items-center space-x-2">
+          <h1 class="text-base sm:text-lg font-black tracking-widest uppercase text-white leading-tight">ATELIER</h1>
+          <span class="text-[9px] bg-red-700 text-white px-1.5 py-0.5 rounded font-black shadow-sm">135 YEARS</span>
+        </div>
+        <span class="text-[10px] text-amber-200 tracking-wider font-medium block">Legacy of 135 Years • Bespoke Alteration & Billing</span>
+      </div>
+    </div>
+    
+    <!-- Top Navigation Tabs (Desktop) -->
+    <div class="hidden lg:flex items-center bg-black/50 border border-stone-700 rounded-2xl p-1 text-xs space-x-1">
+      <button onclick="switchTab('alterations')" id="dtab-alterations" class="px-3.5 py-1.5 rounded-xl font-bold bg-amber-500 text-stone-950 shadow">
+        <i class="fa-solid fa-scissors mr-1 text-red-800"></i> Alterations (<span id="dtab-order-count">10</span>)
+      </button>
+      <button onclick="switchTab('new-slip')" id="dtab-new-slip" class="px-3.5 py-1.5 rounded-xl font-bold text-amber-300 hover:text-amber-200">
+        <i class="fa-solid fa-plus-circle mr-1"></i> + New Alteration Sheet
+      </button>
+      <button onclick="switchTab('billing')" id="dtab-billing" class="px-3.5 py-1.5 rounded-xl font-bold text-stone-300 hover:text-white">
+        <i class="fa-solid fa-file-invoice-dollar mr-1 text-emerald-400"></i> GST Invoices (<span id="dtab-inv-count">2</span>)
+      </button>
+      <button onclick="switchTab('customers')" id="dtab-customers" class="px-3.5 py-1.5 rounded-xl font-bold text-stone-300 hover:text-white">
+        <i class="fa-solid fa-users mr-1 text-blue-400"></i> Customer DB (<span id="dtab-cust-count">10</span>)
+      </button>
+      <button onclick="switchTab('gallery')" id="dtab-gallery" class="px-3.5 py-1.5 rounded-xl font-bold text-stone-300 hover:text-white">
+        <i class="fa-solid fa-gem mr-1 text-amber-400"></i> Gallery
+      </button>
+    </div>
+
+    <!-- Right Action Bar -->
+    <div class="flex items-center space-x-2">
+      <button onclick="openQRModal()" class="bg-stone-800 hover:bg-stone-700 text-amber-300 border border-amber-400/40 px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center shadow-sm">
+        <i class="fa-solid fa-mobile-screen-button mr-1.5"></i> Phone Link
+      </button>
+      <button onclick="printAll4Slips()" class="bg-red-800 hover:bg-red-700 text-white font-bold px-3 py-1.5 rounded-xl text-xs flex items-center shadow border border-red-600">
+        <i class="fa-solid fa-print mr-1"></i> 4-in-1 Sheet
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-5xl w-full mx-auto p-3 sm:p-6 no-print space-y-4">
+
+    <!-- Status & Export Toolbar -->
+    <div class="bg-white border border-stone-200 text-xs px-4 py-2.5 rounded-2xl flex items-center justify-between shadow-sm">
+      <div class="flex items-center space-x-2">
+        <span class="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="font-bold text-stone-800" id="sync-text">Atelier Bespoke — Digital Slips & Local-First System</span>
+      </div>
+      <div class="flex items-center space-x-3 text-[11px] font-bold">
+        <button onclick="exportCSV()" class="text-stone-700 hover:text-red-700 flex items-center">
+          <i class="fa-solid fa-file-excel mr-1 text-emerald-600"></i> Export Alterations (Excel)
+        </button>
+        <span class="text-stone-300">|</span>
+        <button onclick="exportInvoicesCSV()" class="text-stone-700 hover:text-red-700 flex items-center">
+          <i class="fa-solid fa-file-invoice mr-1 text-red-700"></i> Export Invoices
+        </button>
+        <span class="text-stone-300">|</span>
+        <button onclick="exportCustomersCSV()" class="text-stone-700 hover:text-red-700 flex items-center">
+          <i class="fa-solid fa-users mr-1 text-blue-700"></i> Export Clients
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 1: ALTERATION JOB SHEETS           -->
+    <!-- ========================================== -->
+    <section id="tab-alterations" class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl shadow-sm border border-stone-200">
+        <div>
+          <h2 class="text-base font-black text-stone-900 flex items-center">
+            <i class="fa-solid fa-scissors text-red-800 mr-2"></i> Master Alteration Job Sheets
+          </h2>
+          <p class="text-xs text-stone-500">1-Click PDF Download, WhatsApp Sharing & Single Slip Printing</p>
+        </div>
+        <button onclick="switchTab('new-slip')" class="bg-gradient-to-r from-red-800 to-red-900 text-amber-300 font-bold px-3.5 py-2 rounded-xl text-xs flex items-center shadow border border-amber-500/30">
+          <i class="fa-solid fa-plus-circle mr-1"></i> + New Alteration Sheet
+        </button>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="bg-white p-3 rounded-2xl shadow-sm border border-stone-200 flex items-center space-x-3">
+        <i class="fa-solid fa-magnifying-glass text-stone-400 pl-1"></i>
+        <input type="text" id="search-input" oninput="renderOrders()" placeholder="Search by customer name, bill # (2801, 2802...), group, style..." class="w-full text-sm bg-transparent outline-none py-1">
+        <button onclick="document.getElementById('search-input').value=''; renderOrders();" class="text-stone-400 hover:text-stone-600 text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Slips Grid -->
+      <div id="slips-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SECTION 2: PROPER ORDER-WISE ENTRY FORM    -->
+    <!-- ========================================== -->
+    <section id="tab-new-slip" class="hidden space-y-4">
+      <div class="bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-stone-300 space-y-5">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b pb-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-black uppercase tracking-wider text-stone-900 flex items-center">
+              <i class="fa-solid fa-clipboard-list text-red-700 mr-2"></i>
+              <span id="slip-form-title">Master Alteration Instructions</span>
+            </h2>
+            <p class="text-xs text-stone-500">Sequential Upper Body (1-14) & Lower Body (1-10) with Head Size, Calf, Shoe Size & Extra boxes</p>
+          </div>
+          <button onclick="switchTab('alterations')" class="text-stone-400 hover:text-stone-600 text-sm p-1">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <form id="exact-slip-form" onsubmit="saveExactSlip(event)" class="space-y-4 text-xs">
+          <input type="hidden" id="slip-id">
+
+          <!-- 1. ORDER & CUSTOMER INFORMATION -->
+          <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-black uppercase tracking-wider text-stone-800 flex items-center">
+                <i class="fa-solid fa-user-tag text-red-700 mr-1.5"></i> Order & Customer Details
+              </h3>
+              <span class="text-[10px] bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded-full">Primary Info</span>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div>
+                <label class="block font-bold text-red-800 mb-1">Bill Number *</label>
+                <input type="text" id="slip-bill" required placeholder="e.g. LG101" class="w-full border-2 border-red-300 rounded-xl p-2 font-black text-red-700 bg-white outline-none focus:border-red-600 text-sm">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-600 mb-1">Order Date</label>
+                <input type="date" id="slip-date" class="w-full border rounded-xl p-2 bg-white outline-none focus:border-red-600">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-600 mb-1">Salesman (S.MAN)</label>
+                <input type="text" id="slip-sman" placeholder="e.g. KAIF / IMRAN" class="w-full border rounded-xl p-2 bg-white outline-none focus:border-red-600">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-600 mb-1">Batch Code (B. CODE No.)</label>
+                <input type="text" id="slip-bcode" placeholder="e.g. B-102" class="w-full border rounded-xl p-2 bg-white outline-none focus:border-red-600">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+              <div>
+                <label class="block font-bold text-stone-700 mb-1">Customer Full Name *</label>
+                <input type="text" id="slip-name" required placeholder="e.g. Mr Yahya / Abdul Khaliq" class="w-full border rounded-xl p-2 bg-white font-bold text-stone-900 outline-none focus:border-red-600">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-700 mb-1">Mobile / WhatsApp (TEL No.)</label>
+                <input type="tel" id="slip-phone" placeholder="Customer Phone" class="w-full border rounded-xl p-2 bg-white outline-none focus:border-red-600">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-700 mb-1">Address / Family Group (C/o)</label>
+                <input type="text" id="slip-address" placeholder="e.g. C/o Ayad / Nizamabad" class="w-full border rounded-xl p-2 bg-white outline-none focus:border-red-600">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. UPPER BODY MEASUREMENTS (SEQUENTIAL 1 TO 14) -->
+          <div class="bg-red-50/40 p-4 rounded-2xl border border-red-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-black uppercase tracking-wider text-red-950 flex items-center">
+                <i class="fa-solid fa-shirt text-red-700 mr-1.5"></i> Upper Body Measurements (Inches)
+              </h3>
+              <span class="text-[10px] text-red-700 font-bold">Kurta / Sherwani / Coat / Shirt / Safa</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 text-center">
+              <div class="bg-white p-2 rounded-xl border border-red-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">1. Length</label>
+                <input type="text" id="ub-length" placeholder="44" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-red-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">2. Shoulder</label>
+                <input type="text" id="ub-shoulder" placeholder="18 1/2" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-red-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">3. Sleeves</label>
+                <input type="text" id="ub-sleeves" placeholder="24" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-red-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">4. Chest</label>
+                <input type="text" id="ub-chest" placeholder="43 1/2" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-red-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">5. Neck / Collar</label>
+                <input type="text" id="ub-neck" placeholder="17" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-red-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">6. Stomach</label>
+                <input type="text" id="ub-stomach" placeholder="42 1/2" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-red-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">7. Hips (Top)</label>
+                <input type="text" id="ub-hips" placeholder="44" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-red-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">8. Armhole</label>
+                <input type="text" id="ub-armhole" placeholder="22" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-red-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">9. Arms (Bicep)</label>
+                <input type="text" id="ub-arms" placeholder="15 1/2" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-red-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">10. Front Side (FR)</label>
+                <input type="text" id="ub-frside" placeholder="Front" class="w-full border rounded-lg p-1 text-center font-medium outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-red-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">11. Back Side (BK)</label>
+                <input type="text" id="ub-bkside" placeholder="Back" class="w-full border rounded-lg p-1 text-center font-medium outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border-2 border-red-300">
+                <label class="block text-[11px] font-black text-red-800 mb-0.5">12. Head Size 👑</label>
+                <input type="text" id="ub-headsize" placeholder="22 1/2 (Safa/Cap)" class="w-full border rounded-lg p-1 text-center font-black text-red-700 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-stone-200">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">13. Upper Extra 1</label>
+                <input type="text" id="ub-extra1" placeholder="Cross Back / Cuff" class="w-full border rounded-lg p-1 text-center font-medium outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-stone-200">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">14. Upper Extra 2</label>
+                <input type="text" id="ub-extra2" placeholder="Bicep Flare / Custom" class="w-full border rounded-lg p-1 text-center font-medium outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. LOWER BODY MEASUREMENTS (SEQUENTIAL 1 TO 10) -->
+          <div class="bg-amber-50/50 p-4 rounded-2xl border border-amber-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-black uppercase tracking-wider text-amber-950 flex items-center">
+                <i class="fa-solid fa-person-walking text-amber-700 mr-1.5"></i> Lower Body Measurements (Inches)
+              </h3>
+              <span class="text-[10px] text-amber-800 font-bold">Pajama / Trouser / Dhoti / Pant / Shoes</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-center">
+              <div class="bg-white p-2 rounded-xl border border-amber-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">1. Pant Length</label>
+                <input type="text" id="lb-pantlength" placeholder="38" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-amber-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">2. Waist</label>
+                <input type="text" id="lb-waist" placeholder="42" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-amber-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">3. Thighs</label>
+                <input type="text" id="lb-thighs" placeholder="29 1/2" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-amber-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">4. Seat / Hips</label>
+                <input type="text" id="lb-seat" placeholder="31 1/2" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-amber-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">5. Inside Leg</label>
+                <input type="text" id="lb-inside" placeholder="Inside" class="w-full border rounded-lg p-1 text-center font-medium outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-amber-100">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">6. Bottom (Mori)</label>
+                <input type="text" id="lb-bottom" placeholder="14 1/2" class="w-full border rounded-lg p-1 text-center font-black text-stone-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border-2 border-amber-300">
+                <label class="block text-[11px] font-black text-amber-900 mb-0.5">7. Calf 🦵</label>
+                <input type="text" id="lb-calf" placeholder="16" class="w-full border rounded-lg p-1 text-center font-black text-amber-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border-2 border-amber-300">
+                <label class="block text-[11px] font-black text-amber-900 mb-0.5">8. Shoe Size 👞</label>
+                <input type="text" id="lb-shoesize" placeholder="9 (Jutti/Shoes)" class="w-full border rounded-lg p-1 text-center font-black text-amber-900 outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-stone-200">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">9. Lower Extra 1</label>
+                <input type="text" id="lb-extra1" placeholder="Knee / Ankle" class="w-full border rounded-lg p-1 text-center font-medium outline-none">
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-stone-200">
+                <label class="block text-[11px] font-bold text-stone-600 mb-0.5">10. Lower Extra 2</label>
+                <input type="text" id="lb-extra2" placeholder="Inseam Flare / Custom" class="w-full border rounded-lg p-1 text-center font-medium outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. GARMENT STYLING & DESIGN SPECS -->
+          <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
+            <h3 class="text-xs font-black uppercase tracking-wider text-stone-800 flex items-center">
+              <i class="fa-solid fa-palette text-red-700 mr-1.5"></i> Styling, Fabric & Design Details
+            </h3>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div>
+                <label class="block font-bold text-stone-600 mb-1">Style / Collar</label>
+                <input type="text" id="p-style-notes" placeholder="e.g. Mandarin Collar / Shawl Lapel" class="w-full border rounded-xl p-2 bg-white outline-none">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-600 mb-1">Colour</label>
+                <input type="text" id="slip-colour" placeholder="e.g. Royal Blue / Black" class="w-full border rounded-xl p-2 bg-white outline-none">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-600 mb-1">Style No. / Garment</label>
+                <input type="text" id="slip-style" placeholder="e.g. Bespoke Tuxedo / Kurta" class="w-full border rounded-xl p-2 bg-white outline-none font-bold">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-600 mb-1">Fabric & Texture</label>
+                <input type="text" id="slip-fabric" placeholder="e.g. Pure Silk / Lycra Trouser" class="w-full border rounded-xl p-2 bg-white outline-none">
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-stone-600 mb-1">Extra Info / Tailoring Instructions</label>
+              <input type="text" id="p-extrainfo" placeholder="e.g. French Cuffs, Sunburst metallic beads, Zardozi piping on collar" class="w-full border rounded-xl p-2 bg-white outline-none">
+            </div>
+          </div>
+
+          <!-- 5. WORKSHOP TEAM & PRODUCTION CODES -->
+          <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
+            <h3 class="text-xs font-black uppercase tracking-wider text-stone-800 flex items-center">
+              <i class="fa-solid fa-users-gear text-red-700 mr-1.5"></i> Workshop Team, Master & Signatures
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block font-bold text-red-800 mb-1">SIZE BY (Master / Measurer)</label>
+                <input type="text" id="slip-sizeby" placeholder="e.g. Master Nawab Bhai" class="w-full border-2 border-red-200 rounded-xl p-2 bg-white font-bold outline-none text-stone-900">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-700 mb-1">Given To (Karigar / Cutter)</label>
+                <input type="text" id="slip-givento" placeholder="e.g. Rafiq Bhai" class="w-full border rounded-xl p-2 bg-white font-medium outline-none">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-700 mb-1">Recieved By (Delivery / Master)</label>
+                <input type="text" id="slip-receivedby" placeholder="e.g. Master / Sales" class="w-full border rounded-xl p-2 bg-white font-medium outline-none">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+              <div>
+                <label class="block font-bold text-stone-700 mb-1">Tailor / Karigar Code</label>
+                <input type="text" id="p-tailor" placeholder="e.g. K-15" class="w-full border rounded-xl p-2 bg-white font-bold outline-none text-center">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-600 mb-1">Trial Date</label>
+                <input type="date" id="p-trialdate" class="w-full border rounded-xl p-2 bg-white outline-none">
+              </div>
+              <div>
+                <label class="block font-bold text-emerald-800 mb-1">🚚 Delivery Date</label>
+                <input type="date" id="p-deldate" class="w-full border-2 border-emerald-300 rounded-xl p-2 bg-emerald-50/40 font-bold text-emerald-900 outline-none">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-600 mb-1">Delivery Time</label>
+                <input type="text" id="p-deltime" placeholder="e.g. 6:00 PM" class="w-full border rounded-xl p-2 bg-white outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. WORKSHOP ACCOUNTS & TOTALS -->
+          <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
+            <h3 class="text-xs font-black uppercase tracking-wider text-stone-800 flex items-center">
+              <i class="fa-solid fa-coins text-amber-600 mr-1.5"></i> Workshop Accounts & Payment Summary
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block font-bold text-stone-700 mb-1">Gross Total (GR. TOTAL ₹)</label>
+                <input type="text" id="p-grtotal" placeholder="e.g. 1500" class="w-full border rounded-xl p-2 bg-white font-black text-stone-900 outline-none">
+              </div>
+              <div>
+                <label class="block font-bold text-emerald-800 mb-1">Advance Paid (₹)</label>
+                <input type="text" id="p-advance" placeholder="e.g. 500" class="w-full border rounded-xl p-2 bg-white font-black text-emerald-700 outline-none">
+              </div>
+              <div>
+                <label class="block font-bold text-amber-800 mb-1">Balance Due (₹)</label>
+                <input type="text" id="p-balance" placeholder="e.g. 1000" class="w-full border rounded-xl p-2 bg-white font-black text-amber-900 outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="pt-2 flex space-x-3">
+            <button type="submit" class="flex-1 bg-gradient-to-r from-red-800 to-red-900 hover:from-red-700 hover:to-red-800 text-amber-300 font-black py-3.5 rounded-xl shadow-lg active:scale-98 transition text-sm border border-amber-500/30">
+              <i class="fa-solid fa-check mr-1.5"></i> Save Alteration Sheet
+            </button>
+            <button type="button" onclick="switchTab('alterations')" class="px-6 bg-stone-200 hover:bg-stone-300 text-stone-700 font-semibold py-3.5 rounded-xl text-sm">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SECTION 3: GST INVOICES                    -->
+    <!-- ========================================== -->
+    <section id="tab-billing" class="hidden space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl shadow-sm border border-stone-200">
+        <div>
+          <h2 class="text-base font-black text-stone-900 flex items-center">
+            <i class="fa-solid fa-file-invoice-dollar text-emerald-700 mr-2"></i> Atelier Retail & Billing Invoices
+          </h2>
+          <p class="text-xs text-stone-500">Store GSTIN: 36AAIFI6985N1ZG • 1-Click PDF, WhatsApp & Single Invoice Print</p>
+        </div>
+        <button onclick="switchTab('new-invoice')" class="bg-gradient-to-r from-emerald-800 to-emerald-900 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center shadow">
+          <i class="fa-solid fa-receipt mr-1.5"></i> + Create New GST Bill
+        </button>
+      </div>
+
+      <div id="invoices-list" class="space-y-3"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SECTION 4: CREATE GST INVOICE FORM         -->
+    <!-- ========================================== -->
+    <section id="tab-new-invoice" class="hidden space-y-4">
+      <div class="bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-stone-200 space-y-4">
+        <div class="flex items-center justify-between border-b pb-3">
+          <h2 class="font-black text-stone-900 text-base sm:text-lg flex items-center">
+            <i class="fa-solid fa-receipt text-emerald-700 mr-2"></i> <span id="invoice-form-title">Create Atelier Tax Invoice</span>
+          </h2>
+          <button onclick="switchTab('billing')" class="text-stone-400 text-lg"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <form id="invoice-form" onsubmit="saveInvoice(event)" class="space-y-4 text-xs">
+          <input type="hidden" id="inv-id">
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div><label class="block font-bold text-stone-600 mb-1">Invoice / Bill No. *</label><input type="text" id="inv-no" required class="w-full border rounded-xl p-2 font-black text-red-700 bg-stone-50 outline-none" placeholder="LG101"></div>
+            <div><label class="block font-bold text-stone-600 mb-1">Bill Date *</label><input type="date" id="inv-date" required class="w-full border rounded-xl p-2 bg-stone-50 outline-none"></div>
+            <div><label class="block font-bold text-emerald-800 mb-1"><i class="fa-solid fa-truck-fast mr-1 text-emerald-600"></i> Delivery Date (DD)</label><input type="date" id="inv-delivery-date" class="w-full border border-emerald-300 rounded-xl p-2 bg-emerald-50/50 font-bold text-emerald-900 outline-none"></div>
+            <div><label class="block font-bold text-stone-600 mb-1">Salesman</label><input type="text" id="inv-salesman" class="w-full border rounded-xl p-2 bg-stone-50 font-bold outline-none" placeholder="KAIF"></div>
+            <div><label class="block font-bold text-stone-600 mb-1">Store GSTIN</label><input type="text" id="inv-store-gstin" value="36AAIFI6985N1ZG" class="w-full border rounded-xl p-2 bg-stone-100 font-mono text-stone-600 outline-none" readonly></div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 border-t pt-3">
+            <div><label class="block font-bold text-stone-600 mb-1">Customer Name *</label><input type="text" id="inv-cust-name" required class="w-full border rounded-xl p-2 bg-stone-50 font-bold outline-none" placeholder="MR SANDEEP SINGH SETHI"></div>
+            <div><label class="block font-bold text-stone-600 mb-1">Phone</label><input type="tel" id="inv-cust-phone" class="w-full border rounded-xl p-2 bg-stone-50 outline-none" placeholder="Customer Phone"></div>
+            <div><label class="block font-bold text-stone-600 mb-1">Customer GSTIN</label><input type="text" id="inv-cust-gstin" class="w-full border rounded-xl p-2 bg-stone-50 font-mono outline-none" placeholder="33GMGPS9288N1ZW"></div>
+          </div>
+
+          <div class="border rounded-2xl overflow-hidden shadow-sm">
+            <div class="bg-stone-900 text-amber-300 px-4 py-2.5 flex justify-between items-center font-bold">
+              <span class="text-xs uppercase tracking-wider"><i class="fa-solid fa-cart-shopping mr-1.5 text-emerald-400"></i> Product Items (Physical Bill Format)</span>
+              <button type="button" onclick="addInvoiceItemRow()" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-2.5 py-1 rounded-lg text-xs flex items-center shadow-sm">+ Add Item</button>
+            </div>
+            <table class="w-full text-left text-xs border-collapse">
+              <thead class="bg-stone-800 text-white font-bold border-b">
+                <tr>
+                  <th class="p-2.5 w-12 text-center">S.No.</th>
+                  <th class="p-2.5 w-28">Product Code</th>
+                  <th class="p-2.5 w-16 text-center">Qty</th>
+                  <th class="p-2.5">Product Description</th>
+                  <th class="p-2.5 w-28 text-right">Unit Price (₹)</th>
+                  <th class="p-2.5 w-28 text-right">Total Price (₹)</th>
+                  <th class="p-2.5 w-10"></th>
+                </tr>
+              </thead>
+              <tbody id="inv-items-tbody" class="divide-y bg-white"></tbody>
+            </table>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-stone-50 p-4 rounded-2xl border">
+            <div class="space-y-2">
+              <div><label class="block font-bold text-stone-600 mb-1">Notes</label><input type="text" id="inv-notes" class="w-full border rounded-xl p-2 bg-white outline-none" placeholder="Special notes"></div>
+              <div class="grid grid-cols-2 gap-2">
+                <div><label class="block font-bold text-emerald-800 mb-0.5">Advance Paid (₹)</label><input type="number" id="inv-advance" value="0" min="0" oninput="calculateInvoiceTotals()" class="w-full border rounded-xl p-2 bg-white font-bold text-emerald-700 outline-none"></div>
+                <div><label class="block font-bold text-amber-800 mb-0.5">Balance Due (₹)</label><input type="number" id="inv-balance" value="0" readonly class="w-full border rounded-xl p-2 bg-stone-100 font-bold text-amber-900 outline-none"></div>
+              </div>
+            </div>
+            <div class="space-y-1.5 border-t sm:border-t-0 sm:border-l sm:pl-4 border-stone-200">
+              <div class="flex justify-between"><span>Subtotal:</span><strong id="lbl-subtotal">₹0</strong></div>
+              <div class="flex justify-between items-center"><span>Discount:</span><input type="number" id="inv-discount" value="0" oninput="calculateInvoiceTotals()" class="w-24 border p-1 text-right rounded font-bold text-red-700"></div>
+              <div class="flex justify-between items-center">
+                <span>GST:</span>
+                <select id="inv-gst-rate" onchange="calculateInvoiceTotals()" class="border p-0.5 rounded font-bold">
+                  <option value="5">5%</option>
+                  <option value="12">12%</option>
+                  <option value="18">18%</option>
+                  <option value="0">0%</option>
+                </select>
+                <strong id="lbl-gst-amount">+ ₹0</strong>
+              </div>
+              <div class="flex justify-between text-base font-black text-red-900 border-t pt-1"><span>GRAND TOTAL:</span><span id="lbl-grand-total">₹0</span></div>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full bg-emerald-800 text-white font-black py-3 rounded-xl shadow-lg text-sm">
+            Save & Generate Tax Invoice
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SECTION 5: CUSTOMER DATABASE               -->
+    <!-- ========================================== -->
+    <section id="tab-customers" class="hidden space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-base font-bold text-stone-900 flex items-center">
+          <i class="fa-solid fa-users text-blue-700 mr-2"></i> Client Profiles & Measurement Records
+        </h2>
+      </div>
+      <div id="customers-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SECTION 6: DESIGNER GALLERY                -->
+    <!-- ========================================== -->
+    <section id="tab-gallery" class="hidden space-y-4">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="bg-white p-2 rounded-xl border text-center"><img src="item_suit_blue.png" class="h-48 mx-auto object-contain"><div class="font-bold text-xs mt-1">Royal Blue Tuxedo</div></div>
+        <div class="bg-white p-2 rounded-xl border text-center"><img src="item_kurta_green.png" class="h-48 mx-auto object-contain"><div class="font-bold text-xs mt-1">Forest Green Kurta</div></div>
+        <div class="bg-white p-2 rounded-xl border text-center"><img src="item_kurta_mint.png" class="h-48 mx-auto object-contain"><div class="font-bold text-xs mt-1">Mint Green Kurta</div></div>
+        <div class="bg-white p-2 rounded-xl border text-center"><img src="item_embroidery_detail.jpg" class="h-48 mx-auto object-cover rounded"><div class="font-bold text-xs mt-1">Zardozi Craft</div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile Pairing QR Modal -->
+  <div id="qr-modal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center space-y-4">
+      <h3 class="font-bold text-stone-900"><i class="fa-solid fa-qrcode mr-1 text-red-800"></i> Open on Mobile Phone</h3>
+      <div id="qrcode-container" class="flex justify-center p-2"></div>
+      <div id="qr-url-text" class="text-xs font-mono bg-stone-100 p-2 rounded break-all"></div>
+      <button onclick="closeQRModal()" class="w-full bg-stone-900 text-amber-400 font-bold py-2 rounded-xl text-xs">Done</button>
+    </div>
+  </div>
+
+  <!-- Offline Hard Copy Paper Pad Calibrator & Print Center Modal -->
+  <div id="pad-print-modal" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 hidden no-print">
+    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden border border-stone-300">
+      
+      <!-- Modal Header -->
+      <div class="bg-stone-900 text-white px-4 py-3 flex items-center justify-between border-b border-stone-700">
+        <div class="flex items-center space-x-2">
+          <div class="bg-amber-500 text-stone-950 p-1.5 rounded-lg text-sm"><i class="fa-solid fa-file-invoice"></i></div>
+          <div>
+            <h3 class="font-black text-sm sm:text-base text-amber-300">Offline Hard-Copy Bill Pad Printer</h3>
+            <p class="text-[10px] text-stone-400">Prints dynamic data values directly into your physical pre-printed stationery pad</p>
+          </div>
+        </div>
+        <button onclick="closePadPrintModal()" class="text-stone-400 hover:text-white text-lg p-1"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Calibration Toolbar -->
+      <div class="bg-stone-100 p-3 border-b border-stone-200 text-xs flex flex-wrap items-center justify-between gap-2">
+        <div class="flex flex-wrap items-center gap-2 font-bold text-stone-700">
+          <span class="text-red-800 uppercase tracking-wider text-[10px] font-black"><i class="fa-solid fa-sliders mr-1"></i> Alignment Calibrator:</span>
+          
+          <!-- Top Offset -->
+          <div class="flex items-center bg-white border border-stone-300 rounded-lg px-2 py-1 shadow-sm">
+            <span class="text-stone-500 mr-1.5">Top (Y):</span>
+            <button onclick="adjustPadCalib('offsetY', -1)" class="px-1.5 py-0.5 bg-stone-100 hover:bg-stone-200 rounded font-bold">-1</button>
+            <span id="lbl-pad-offset-y" class="font-mono px-2 text-stone-900">0mm</span>
+            <button onclick="adjustPadCalib('offsetY', 1)" class="px-1.5 py-0.5 bg-stone-100 hover:bg-stone-200 rounded font-bold">+1</button>
+          </div>
+
+          <!-- Left Offset -->
+          <div class="flex items-center bg-white border border-stone-300 rounded-lg px-2 py-1 shadow-sm">
+            <span class="text-stone-500 mr-1.5">Left (X):</span>
+            <button onclick="adjustPadCalib('offsetX', -1)" class="px-1.5 py-0.5 bg-stone-100 hover:bg-stone-200 rounded font-bold">-1</button>
+            <span id="lbl-pad-offset-x" class="font-mono px-2 text-stone-900">0mm</span>
+            <button onclick="adjustPadCalib('offsetX', 1)" class="px-1.5 py-0.5 bg-stone-100 hover:bg-stone-200 rounded font-bold">+1</button>
+          </div>
+
+          <!-- Row Spacing -->
+          <div class="flex items-center bg-white border border-stone-300 rounded-lg px-2 py-1 shadow-sm">
+            <span class="text-stone-500 mr-1.5">Row Height:</span>
+            <button onclick="adjustPadCalib('rowHeight', -0.5)" class="px-1.5 py-0.5 bg-stone-100 hover:bg-stone-200 rounded font-bold">-</button>
+            <span id="lbl-pad-row-height" class="font-mono px-2 text-stone-900">8.5mm</span>
+            <button onclick="adjustPadCalib('rowHeight', 0.5)" class="px-1.5 py-0.5 bg-stone-100 hover:bg-stone-200 rounded font-bold">+</button>
+          </div>
+
+          <!-- Font Size -->
+          <div class="flex items-center bg-white border border-stone-300 rounded-lg px-2 py-1 shadow-sm">
+            <span class="text-stone-500 mr-1.5">Font:</span>
+            <button onclick="adjustPadCalib('fontSize', -1)" class="px-1.5 py-0.5 bg-stone-100 hover:bg-stone-200 rounded font-bold">A-</button>
+            <span id="lbl-pad-font-size" class="font-mono px-2 text-stone-900">12px</span>
+            <button onclick="adjustPadCalib('fontSize', 1)" class="px-1.5 py-0.5 bg-stone-100 hover:bg-stone-200 rounded font-bold">A+</button>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="togglePadGuide()" id="btn-toggle-guide" class="bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold px-2.5 py-1.5 rounded-lg border flex items-center shadow-sm text-xs">
+            <i class="fa-solid fa-eye mr-1 text-stone-600"></i> <span id="lbl-toggle-guide">Hide Background Guide</span>
+          </button>
+          <button onclick="savePadCalib()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-3 py-1.5 rounded-lg flex items-center shadow-sm text-xs">
+            <i class="fa-solid fa-floppy-disk mr-1"></i> Save Settings
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Interactive Visual Preview Container -->
+      <div class="flex-1 overflow-auto p-4 bg-stone-200 flex justify-center items-start">
+        <div id="pad-preview-target" class="bg-white shadow-xl rounded-lg overflow-hidden transition-all" style="width: 210mm; min-height: 297mm; transform-origin: top center;">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="bg-white p-3 border-t border-stone-200 flex justify-between items-center text-xs">
+        <div class="text-stone-500 italic">
+          💡 Place your <strong>original pre-printed stationery pad</strong> in the printer tray and click Print.
+        </div>
+        <div class="flex space-x-2">
+          <button onclick="closePadPrintModal()" class="bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold px-4 py-2 rounded-xl">Cancel</button>
+          <button onclick="printCalibratedPad()" class="bg-red-800 hover:bg-red-900 text-white font-black px-6 py-2 rounded-xl shadow-lg flex items-center text-sm">
+            <i class="fa-solid fa-print mr-2 text-amber-300"></i> 🖨️ Print On Paper Pad
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offline Cellular SMS / Text Message Modal -->
+  <div id="sms-modal" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden no-print">
+    <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border border-stone-300 flex flex-col">
+      
+      <!-- Header -->
+      <div class="bg-stone-900 text-white px-4 py-3.5 flex items-center justify-between border-b border-stone-800">
+        <div class="flex items-center space-x-2">
+          <div class="bg-sky-500 text-white p-2 rounded-xl text-sm shadow-sm"><i class="fa-solid fa-comment-sms"></i></div>
+          <div>
+            <h3 class="font-black text-sm text-white" id="sms-modal-title">Offline Cellular SMS (No Internet)</h3>
+            <p class="text-[10px] text-stone-400">Works without WhatsApp or Internet via regular SIM SMS</p>
+          </div>
+        </div>
+        <button onclick="closeSMSModal()" class="text-stone-400 hover:text-white text-lg p-1"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-4 space-y-3.5 text-xs">
+        <div>
+          <label class="block font-bold text-stone-600 mb-1">Customer Mobile Number:</label>
+          <div class="flex items-center border border-stone-300 rounded-xl overflow-hidden bg-stone-50">
+            <span class="px-2.5 text-stone-500 font-bold bg-stone-100 border-r py-2">📞 +91</span>
+            <input type="tel" id="sms-target-phone" class="w-full p-2 bg-transparent font-bold text-stone-900 outline-none text-xs" placeholder="Mobile number" oninput="updateSMSCharCount()">
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="font-bold text-stone-600">SMS Message Content:</label>
+            <span class="text-[10px] font-mono text-sky-700 font-bold" id="sms-char-count">0 chars</span>
+          </div>
+          <textarea id="sms-message-text" rows="5" class="w-full border border-stone-300 rounded-xl p-2.5 font-mono text-[11px] leading-relaxed bg-stone-50 focus:bg-white focus:border-sky-600 outline-none resize-none" oninput="updateSMSCharCount()"></textarea>
+        </div>
+
+        <!-- PC vs Mobile Action Buttons -->
+        <div class="space-y-2 pt-1">
+          <div class="grid grid-cols-2 gap-2">
+            <!-- Mobile SIM Direct Send -->
+            <button onclick="triggerDeviceSMS('mobile')" class="bg-sky-600 hover:bg-sky-700 text-white font-bold p-2.5 rounded-xl text-xs flex items-center justify-center shadow-sm">
+              <i class="fa-solid fa-mobile-screen-button mr-1.5 text-amber-300"></i> 📱 Mobile SIM SMS
+            </button>
+            <!-- 1-Click Copy -->
+            <button onclick="copySMSText()" class="bg-stone-900 hover:bg-stone-800 text-amber-300 font-bold p-2.5 rounded-xl text-xs flex items-center justify-center shadow-sm" id="btn-copy-sms">
+              <i class="fa-solid fa-copy mr-1.5"></i> 📋 Copy Message
+            </button>
+          </div>
+
+          <!-- PC Web Senders -->
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="openGoogleMessagesWeb()" class="bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold p-2 rounded-xl text-xs flex items-center justify-center border border-blue-200">
+              <i class="fa-solid fa-comments mr-1.5 text-blue-600"></i> Google Messages Web
+            </button>
+            <button onclick="sendViaWhatsAppWeb()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold p-2 rounded-xl text-xs flex items-center justify-center border border-emerald-200">
+              <i class="fa-brands fa-whatsapp mr-1.5 text-emerald-600 text-sm"></i> WhatsApp Web
+            </button>
+          </div>
+        </div>
+
+        <!-- PC Explanation Note -->
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-[11px] text-amber-900 space-y-1">
+          <div class="font-bold flex items-center"><i class="fa-solid fa-circle-info text-amber-700 mr-1.5"></i> Sending from PC vs Mobile:</div>
+          <p class="text-[10.5px] leading-tight text-amber-800">
+            • <strong>On Mobile Phones:</strong> Tap <strong>"📱 Mobile SIM SMS"</strong> to send directly from your phone's SIM card.<br>
+            • <strong>On PC / Laptop:</strong> PCs do not have a built-in SIM card. Use <strong>"Google Messages Web"</strong> (links to your phone) or <strong>"WhatsApp Web"</strong> to send from PC!
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="bg-stone-50 px-4 py-2.5 border-t border-stone-200 flex justify-end items-center">
+        <button onclick="closeSMSModal()" class="bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold px-4 py-1.5 rounded-xl text-xs">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRINT ONLY: Specific Single Customer Sheet -->
+  <div id="print-area" class="print-only"></div>
+
+  <!-- Bottom Mobile Nav -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-stone-950 border-t border-stone-800 shadow-2xl px-3 py-2 flex justify-around items-center z-40 md:hidden no-print">
+    <button onclick="switchTab('alterations')" id="nav-btn-alterations" class="flex flex-col items-center text-amber-400 font-bold text-[10px]">
+      <i class="fa-solid fa-scissors text-base mb-0.5"></i>
+      Alterations
+    </button>
+    <button onclick="switchTab('new-slip')" id="nav-btn-new-slip" class="flex flex-col items-center text-stone-400 text-[10px]">
+      <i class="fa-solid fa-plus-circle text-xl text-amber-400 -mt-2 mb-0.5 bg-stone-950 rounded-full shadow"></i>
+      + Alteration
+    </button>
+    <button onclick="switchTab('billing')" id="nav-btn-billing" class="flex flex-col items-center text-stone-400 text-[10px]">
+      <i class="fa-solid fa-file-invoice text-base mb-0.5"></i>
+      Billing
+    </button>
+    <button onclick="switchTab('customers')" id="nav-btn-customers" class="flex flex-col items-center text-stone-400 text-[10px]">
+      <i class="fa-solid fa-users text-base mb-0.5"></i>
+      Clients
+    </button>
+  </nav>
+
+  <script>
+    let orders = [];
+    let invoices = [];
+    let customers = [];
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+    // Helper: Normalize WhatsApp Phone Number
+    function formatWhatsAppPhone(phone) {
+      if (!phone) return '';
+      let clean = String(phone).replace(/\D/g, '');
+      if (clean.length === 10) clean = '91' + clean;
+      return clean;
+    }
+
+    // Helper: Standardize Bill Display (e.g. LG101, LG102)
+    function formatBillDisplay(bill) {
+      if (!bill) return 'LG101';
+      let str = String(bill).trim().toUpperCase();
+      if (str.startsWith('LG')) return str;
+      return 'LG' + str;
+    }
+
+    // Helper: Auto-Increment Bill Number starting from LG101 (LG101, LG102, LG103...)
+    function getNextBillNo() {
+      let maxNum = 100; // Sequence starts at LG101
+      orders.forEach(o => {
+        if (!o.bill) return;
+        const str = String(o.bill).trim().toUpperCase();
+        const match = str.match(/^LG\s*(\d+)$/i);
+        if (match && match[1]) {
+          const num = parseInt(match[1], 10);
+          // Only track the LG101, LG102, LG103 sequence (ignoring old legacy 400+ sample data)
+          if (!isNaN(num) && num >= 101 && num < 400 && num > maxNum) {
+            maxNum = num;
+          }
+        }
+      });
+      return 'LG' + (maxNum + 1);
+    }
+
+    // Helper: Auto-Increment Invoice Number starting from LG101 (LG101, LG102, LG103...)
+    function getNextInvoiceNo() {
+      let maxNum = 100; // Sequence starts at LG101
+      invoices.forEach(inv => {
+        if (!inv.invoiceNo) return;
+        const str = String(inv.invoiceNo).trim().toUpperCase();
+        const match = str.match(/^LG\s*(\d+)$/i);
+        if (match && match[1]) {
+          const num = parseInt(match[1], 10);
+          if (!isNaN(num) && num >= 101 && num < 400 && num > maxNum) {
+            maxNum = num;
+          }
+        }
+      });
+      return 'LG' + (maxNum + 1);
+    }
+
+    async function loadData() {
+      
+      try {
+        const [ordersRes, custRes, invRes] = await Promise.all([
+          fetch('orders.json').catch(() => null),
+          fetch('customers.json').catch(() => null),
+          fetch('invoices.json').catch(() => null)
+        ]);
+
+        if (ordersRes && ordersRes.ok) orders = await ordersRes.json();
+        else orders = JSON.parse(localStorage.getItem('atelier_orders_local')) || [];
+
+        if (custRes && custRes.ok) customers = await custRes.json();
+        else customers = JSON.parse(localStorage.getItem('atelier_cust_local')) || [];
+
+        if (invRes && invRes.ok) invoices = await invRes.json();
+        else invoices = JSON.parse(localStorage.getItem('atelier_inv_local')) || [];
+
+        const syncEl = document.getElementById('sync-text');
+        if (syncEl) syncEl.innerText = `Atelier Synced (${orders.length} Slips, ${invoices.length} Invoices, ${customers.length} Clients)`;
+      } catch (err) {
+        const syncEl = document.getElementById('sync-text');
+        if (syncEl) syncEl.innerText = 'Running in Offline Local Browser Mode';
+      }
+
+      updateBadgeCounts();
+      renderOrders();
+      renderInvoices();
+      renderCustomers();
+    }
+
+    function updateBadgeCounts() {
+      if (document.getElementById('dtab-order-count')) document.getElementById('dtab-order-count').innerText = orders.length;
+      if (document.getElementById('dtab-inv-count')) document.getElementById('dtab-inv-count').innerText = invoices.length;
+      if (document.getElementById('dtab-cust-count')) document.getElementById('dtab-cust-count').innerText = customers.length;
+    }
+
+    async function syncOrders() {
+      localStorage.setItem('atelier_orders_local', JSON.stringify(orders));
+      updateBadgeCounts();
+      try {
+        await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orders, null, 2)
+        });
+      } catch (e) {}
+      renderOrders();
+    }
+
+    async function syncInvoices() {
+      localStorage.setItem('atelier_inv_local', JSON.stringify(invoices));
+      updateBadgeCounts();
+      try {
+        await fetch('/api/invoices', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(invoices, null, 2)
+        });
+      } catch (e) {}
+      renderInvoices();
+    }
+
+    async function syncCustomers() {
+      localStorage.setItem('atelier_cust_local', JSON.stringify(customers));
+      updateBadgeCounts();
+      try {
+        await fetch('/api/customers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(customers, null, 2)
+        });
+      } catch (e) {}
+      renderCustomers();
+    }
+
+    // Render Alteration Slips
+    function renderOrders() {
+      const q = (document.getElementById('search-input')?.value || '').toLowerCase();
+      const container = document.getElementById('slips-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const filtered = orders.filter(o => 
+        (o.name && o.name.toLowerCase().includes(q)) || 
+        (o.bill && o.bill.toLowerCase().includes(q)) || 
+        (o.phone && o.phone.includes(q)) ||
+        (o.co && o.co.toLowerCase().includes(q)) ||
+        (o.style && o.style.toLowerCase().includes(q))
+      );
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="col-span-2 bg-white p-8 rounded-2xl border text-center text-stone-400 text-xs">No alteration slips found.</div>`;
+        return;
+      }
+
+      filtered.forEach(o => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-2xl p-4 shadow-sm border border-stone-300 flex flex-col justify-between space-y-3 hover:border-red-400 transition';
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between border-b pb-2">
+              <div>
+                <div class="flex items-center space-x-2">
+                  <span class="text-xs font-black text-red-700 bg-red-50 px-2 py-0.5 rounded border border-red-300">Bill No. ${escapeHtml(formatBillDisplay(o.bill))}</span>
+                  <h3 class="font-black text-stone-900 text-sm">${escapeHtml(o.name)}</h3>
+                </div>
+                <div class="text-[11px] text-stone-500 mt-1 space-x-2">
+                  ${o.co ? `<span class="font-bold text-red-900 bg-red-50 px-1.5 py-0.5 rounded border border-red-200">${escapeHtml(o.co)}</span>` : ''}
+                  ${o.phone ? `<span>📞 ${escapeHtml(o.phone)}</span>` : ''}
+                  ${o.tailor ? `<span>🪡 Tailor: <strong>${escapeHtml(o.tailor)}</strong></span>` : ''}
+                </div>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-stone-100 text-stone-700 border">${escapeHtml(o.style || 'Kurta')}</span>
+            </div>
+
+            <!-- Parameters in Proper Sequential Order -->
+            <div class="mt-2.5 space-y-1.5 text-xs">
+              <div class="bg-red-50/50 p-2 rounded-xl border border-red-100">
+                <div class="text-[10px] uppercase font-black text-red-800 mb-1 flex justify-between">
+                  <span>👔 Upper Body (1 to 14)</span>
+                  ${o.headSize ? `<span class="font-bold text-red-700">👑 Head: ${escapeHtml(o.headSize)}</span>` : ''}
+                </div>
+                <div class="grid grid-cols-4 gap-1 text-stone-700 font-mono text-[11px]">
+                  <div><span class="text-stone-400 font-sans">1.Len:</span> <strong>${o.length || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">2.Shldr:</span> <strong>${o.shoulder || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">3.Slv:</span> <strong>${o.sleeves || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">4.Chest:</span> <strong>${o.chest || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">5.Neck:</span> <strong>${o.neck || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">6.Stom:</span> <strong>${o.stomach || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">7.Hips:</span> <strong>${o.hips || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">8.Armh:</span> <strong>${o.armhole || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">9.Arms:</span> <strong>${o.arms || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">10.FR:</span> <strong>${o.frSide || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">11.BK:</span> <strong>${o.bkSide || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">12.Head:</span> <strong>${o.headSize || '-'}</strong></div>
+                </div>
+              </div>
+
+              <div class="bg-amber-50/50 p-2 rounded-xl border border-amber-100">
+                <div class="text-[10px] uppercase font-black text-amber-800 mb-1 flex justify-between">
+                  <span>👖 Lower Body (1 to 10)</span>
+                  ${o.shoeSize ? `<span class="font-bold text-amber-900">👞 Shoe: ${escapeHtml(o.shoeSize)}</span>` : ''}
+                </div>
+                <div class="grid grid-cols-4 gap-1 text-stone-700 font-mono text-[11px]">
+                  <div><span class="text-stone-400 font-sans">1.P.Len:</span> <strong>${o.pantLength || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">2.Waist:</span> <strong>${o.waist || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">3.Thigh:</span> <strong>${o.thighs || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">4.Seat:</span> <strong>${o.seat || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">5.Ins:</span> <strong>${o.inside || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">6.Bot:</span> <strong>${o.bottom || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">7.Calf:</span> <strong>${o.calf || '-'}</strong></div>
+                  <div><span class="text-stone-400 font-sans">8.Shoe:</span> <strong>${o.shoeSize || '-'}</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1 text-xs border-t border-stone-100 flex-wrap gap-2">
+            <span class="text-stone-500 text-[11px] italic truncate max-w-[120px]">${o.notes || 'Alteration Sheet'}</span>
+            <div class="flex items-center space-x-1.5">
+              <!-- PDF Download Button -->
+              <button onclick="downloadSlipPDF('${o.id}')" class="bg-red-800 hover:bg-red-900 text-amber-300 font-bold px-2.5 py-1 rounded-lg flex items-center shadow-sm text-xs" title="Download 1-Page PDF Slip">
+                <i class="fa-solid fa-file-pdf mr-1"></i> PDF
+              </button>
+              <!-- WhatsApp Button -->
+              <button onclick="shareSlipWhatsApp('${o.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded-lg flex items-center shadow-sm text-xs" title="Send Alteration Slip on WhatsApp">
+                <i class="fa-brands fa-whatsapp text-sm mr-1"></i> WhatsApp
+              </button>
+              <!-- Offline Cellular SMS Button -->
+              <button onclick="sendSlipSMS('${o.id}')" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-2.5 py-1 rounded-lg flex items-center shadow-sm text-xs" title="Send Offline SMS (No Internet/WhatsApp)">
+                <i class="fa-solid fa-comment-sms text-sm mr-1"></i> SMS
+              </button>
+              <button onclick="printSingleExactSlip('${o.id}')" class="bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold px-2 py-1 rounded-lg border flex items-center text-xs" title="Print this customer's slip">
+                <i class="fa-solid fa-print mr-1"></i> Print
+              </button>
+              <button onclick="createInvoiceFromSlip('${o.id}')" class="bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold px-2 py-1 rounded-lg border flex items-center text-xs" title="Create GST Invoice">
+                <i class="fa-solid fa-receipt mr-1"></i> + Bill
+              </button>
+              <button onclick="editExactSlip('${o.id}')" class="bg-stone-100 hover:bg-stone-200 text-stone-800 px-2 py-1 rounded-lg text-xs">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button onclick="deleteOrder('${o.id}')" class="text-red-500 hover:text-red-700 p-1 text-xs">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ==========================================
+    // 📲 WHATSAPP SHARING FOR ALTERATION SLIPS
+    // ==========================================
+    function shareSlipWhatsApp(id) {
+      const o = orders.find(x => x.id === id);
+      if (!o) return;
+
+      let phone = formatWhatsAppPhone(o.phone);
+      if (!phone) {
+        const input = prompt(`Enter WhatsApp number for ${o.name} (e.g. 10-digit number):`, "");
+        if (!input) return;
+        phone = formatWhatsAppPhone(input);
+      }
+
+      // Intelligent Accounts Formatting
+      let accountsSection = '';
+      const grossVal = Number(o.grTotal) || 0;
+      const advVal = Number(o.advance) || 0;
+      const balVal = Number(o.balance) || 0;
+
+      if (grossVal > 0 || advVal > 0 || balVal > 0) {
+        accountsSection = `💰 *Payment Details:*\n` +
+          `• Gross Total: ₹${grossVal.toLocaleString('en-IN')}\n` +
+          `• Advance Paid: ₹${advVal.toLocaleString('en-IN')}\n` +
+          `• *Balance Due:* ₹${balVal.toLocaleString('en-IN')}\n`;
+      } else {
+        const linkedInv = invoices.find(inv => 
+          (inv.invoiceNo && o.bill && (inv.invoiceNo.includes(o.bill) || o.bill.includes(inv.invoiceNo.replace(/\D/g, '')))) ||
+          (inv.customerName && o.name && inv.customerName.toLowerCase().trim() === o.name.toLowerCase().trim())
+        );
+
+        if (linkedInv && linkedInv.grandTotal > 0) {
+          accountsSection = `💰 *Billing & Payment Details:* (Invoice #${linkedInv.invoiceNo})\n` +
+            `• Bill Total: ₹${Number(linkedInv.grandTotal).toLocaleString('en-IN')}\n` +
+            `• Advance Paid: ₹${Number(linkedInv.advancePaid).toLocaleString('en-IN')}\n` +
+            `• *Balance Due:* ₹${Number(linkedInv.balanceDue).toLocaleString('en-IN')}\n` +
+            `• Status: *${linkedInv.paymentStatus}*\n`;
+        } else {
+          accountsSection = `💰 *Payment Status:* Complimentary Alteration / Free Service\n`;
+        }
+      }
+
+      const msg = `✨ *ATELIER - Bespoke Alteration Job Sheet* ✨\n` +
+        `🏛️ *Legacy of 135 Years | Banjara Hills, Hyderabad*\n\n` +
+        `👤 *Customer Name:* ${o.name}\n` +
+        `🔴 *Bill / Job No:* #${formatBillDisplay(o.bill)}\n` +
+        (o.co ? `📍 *Group / Address:* ${o.co}\n` : '') +
+        `👔 *Garment:* ${o.style || 'Custom Bespoke Suit'} ${o.colour ? '(' + o.colour + ')' : ''}\n` +
+        (o.trialDate ? `📅 *Trial Date:* ${o.trialDate}\n` : '') +
+        (o.delDate ? `🚚 *Delivery Date:* ${o.delDate} ${o.delTime || ''}\n` : '') +
+        (o.tailor ? `🪡 *Tailor / Karigar Code:* ${o.tailor}\n` : '') +
+        `\n📏 *Upper Body Measurements (Inches):*\n` +
+        `• Length: ${o.length || '-'} | Shoulder: ${o.shoulder || '-'} | Sleeves: ${o.sleeves || '-'}\n` +
+        `• Chest: ${o.chest || '-'} | Neck: ${o.neck || '-'} | Stomach: ${o.stomach || '-'}\n` +
+        `• Hips: ${o.hips || '-'} | Armhole: ${o.armhole || '-'} | Arms: ${o.arms || '-'}\n` +
+        (o.headSize ? `• 👑 *Head Size (Safa/Cap):* ${o.headSize}\n` : '') +
+        `\n👖 *Lower Body Measurements (Inches):*\n` +
+        `• Pant Length: ${o.pantLength || '-'} | Waist: ${o.waist || '-'}\n` +
+        `• Thighs: ${o.thighs || '-'} | Seat: ${o.seat || '-'} | Bottom: ${o.bottom || '-'}\n` +
+        (o.calf ? `• 🦵 *Calf:* ${o.calf}\n` : '') +
+        (o.shoeSize ? `• 👞 *Shoe Size:* ${o.shoeSize}\n` : '') +
+        `\n` + accountsSection +
+        `\n📍 *Store Address:*\n` +
+        `Plot No-8, Rd No-12, Banjara Hills, Beside Command & Control Police Commissionerate, Hyderabad-500034.\n` +
+        `` +
+        `_Thank you for choosing ATELIER. We look forward to serving you!_`;
+
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    // ==========================================
+    // 📲 WHATSAPP SHARING FOR GST INVOICES
+    // ==========================================
+    function shareInvoiceWhatsApp(id) {
+      const inv = invoices.find(x => x.id === id);
+      if (!inv) return;
+
+      let phone = formatWhatsAppPhone(inv.customerPhone);
+      if (!phone) {
+        const input = prompt(`Enter WhatsApp number for ${inv.customerName} (e.g. 10-digit number):`, "");
+        if (!input) return;
+        phone = formatWhatsAppPhone(input);
+      }
+
+      let itemsText = '';
+      inv.items.forEach((it, idx) => {
+        itemsText += `${idx + 1}. *${it.productCode}* - ${it.description} (x${it.qty}) = ₹${Number(it.total).toLocaleString('en-IN')}\n`;
+      });
+
+      const msg = `🧾 *ATELIER - TAX INVOICE & RECEIPT* 🧾\n` +
+        `🏛️ *Legacy of 135 Years | Banjara Hills, Hyderabad*\n` +
+        `Store GSTIN: ${inv.storeGstin || '36AAIFI6985N1ZG'}\n\n` +
+        `👤 *Customer:* ${inv.customerName}\n` +
+        `📄 *Invoice No:* #${inv.invoiceNo}\n` +
+        `📅 *Date:* ${inv.date}\n` +
+        (inv.deliveryDate ? `📦 *Delivery Date:* ${inv.deliveryDate}\n` : '') +
+        (inv.salesman ? `👔 *Salesman Code:* ${inv.salesman}\n` : '') +
+        (inv.customerGstin ? `🏛️ *Client GSTIN:* ${inv.customerGstin}\n` : '') +
+        `\n🛍️ *Itemized Products:*\n` + itemsText +
+        `\n💵 *Financial Breakdown:*\n` +
+        `• Subtotal: ₹${Number(inv.subtotal).toLocaleString('en-IN')}\n` +
+        (inv.discount > 0 ? `• Special Discount: - ₹${Number(inv.discount).toLocaleString('en-IN')}\n` : '') +
+        `• GST (${inv.gstRate}%): + ₹${Number(inv.gstAmount).toLocaleString('en-IN')}\n` +
+        `💎 *GRAND TOTAL: ₹${Number(inv.grandTotal).toLocaleString('en-IN')}.00*\n\n` +
+        `💳 *Payment Summary:*\n` +
+        `• Advance Paid: ₹${Number(inv.advancePaid).toLocaleString('en-IN')}\n` +
+        `• *Balance Due:* ₹${Number(inv.balanceDue).toLocaleString('en-IN')}\n` +
+        `• Status: *${inv.paymentStatus}*\n\n` +
+        (inv.deliveryDate ? `🚚 *Order Delivery: Expected on ${inv.deliveryDate}*\n\n` : '') +
+        `📍 *Store Address:*\n` +
+        `Plot No-8, Rd No-12, Banjara Hills, Beside Command & Control Police Commissionerate, Hyderabad-500034.\n` +
+        `` +
+        `_ALL MAJOR CREDIT CARDS ACCEPTED. Thank you for your patronage!_`;
+
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    // ==========================================
+    // 📲 WHATSAPP SHARING FOR CUSTOMER PROFILE
+    // ==========================================
+    function shareCustomerWhatsApp(custId) {
+      const c = customers.find(x => x.id === custId);
+      if (!c) return;
+
+      let phone = formatWhatsAppPhone(c.phone);
+      if (!phone) {
+        const input = prompt(`Enter WhatsApp number for ${c.name} (e.g. 10-digit number):`, "");
+        if (!input) return;
+        phone = formatWhatsAppPhone(input);
+      }
+
+      const m = c.measurements || {};
+      const msg = `👑 *ATELIER * 👑\n` +
+        `Dear *${c.name}*,\n\n` +
+        `Here is your saved bespoke measurement profile:\n` +
+        `• Length: ${m.length || '-'} | Shoulder: ${m.shoulder || '-'} | Sleeves: ${m.sleeves || '-'}\n` +
+        `• Chest: ${m.chest || '-'} | Waist: ${m.waist || '-'} | Neck: ${m.neck || '-'}\n` +
+        (m.headSize ? `• Head Size: ${m.headSize}\n` : '') +
+        (m.calf ? `• Calf: ${m.calf}\n` : '') +
+        (m.shoeSize ? `• Shoe Size: ${m.shoeSize}\n` : '') +
+        `\n📍 *Banjara Hills, Hyderabad* \n` +
+        `_Thank you for being our esteemed client!_`;
+
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    // ==========================================
+    // 💬 OFFLINE CELLULAR SMS (NO INTERNET / NO WHATSAPP)
+    // ==========================================
+    function sendSlipSMS(id) {
+      const o = orders.find(x => x.id === id);
+      if (!o) return;
+
+      const grossVal = Number(o.grTotal) || 0;
+      const advVal = Number(o.advance) || 0;
+      const balVal = Number(o.balance) || 0;
+
+      let paymentText = '';
+      if (grossVal > 0 || advVal > 0 || balVal > 0) {
+        paymentText = `Total: Rs.${grossVal.toLocaleString('en-IN')} | Adv: Rs.${advVal.toLocaleString('en-IN')} | Bal: Rs.${balVal.toLocaleString('en-IN')}`;
+      } else {
+        paymentText = `Payment: Complimentary Alteration`;
+      }
+
+      const billClean = formatBillDisplay(o.bill);
+      const text = `ATELIER \nDear ${o.name},\nYour Alteration Job Sheet #${billClean} is confirmed.\nGarment: ${o.style || 'Custom Garment'}${o.colour ? ' (' + o.colour + ')' : ''}\n${o.trialDate ? 'Trial: ' + o.trialDate + '\n' : ''}${o.delDate ? 'Delivery: ' + o.delDate + (o.delTime ? ' ' + o.delTime : '') + '\n' : ''}${paymentText}\nAtelier Studio`;
+
+      openSMSModal(o.phone || '', text, `SMS: Alteration Slip #${billClean}`);
+    }
+
+    function sendInvoiceSMS(id) {
+      const inv = invoices.find(x => x.id === id);
+      if (!inv) return;
+
+      const itemSummary = inv.items.map(it => `${it.productCode} (${it.description}) x${it.qty}`).join(', ');
+
+      const text = `ATELIER \nDear ${inv.customerName},\nTax Invoice #${inv.invoiceNo} dated ${inv.date}.${inv.deliveryDate ? ' Del Date: ' + inv.deliveryDate + '.' : ''}\nItems: ${itemSummary}\nGrand Total: Rs.${Number(inv.grandTotal).toLocaleString('en-IN')}\nPaid: Rs.${Number(inv.advancePaid).toLocaleString('en-IN')} | Bal Due: Rs.${Number(inv.balanceDue).toLocaleString('en-IN')}\nAtelier Studio.\nPh: , `;
+
+      openSMSModal(inv.customerPhone || '', text, `SMS: Tax Invoice #${inv.invoiceNo}`);
+    }
+
+    function sendCustomerSMS(custId) {
+      const c = customers.find(x => x.id === custId);
+      if (!c) return;
+      const m = c.measurements || {};
+
+      const text = `ATELIER \nDear ${c.name},\nYour Bespoke Measurements Profile:\nLen: ${m.length || '-'}, Shldr: ${m.shoulder || '-'}, Slv: ${m.sleeves || '-'}, Chest: ${m.chest || '-'}, Neck: ${m.neck || '-'}, Stmch: ${m.stomach || '-'}\nPant: ${m.pantLength || '-'}, Waist: ${m.waist || '-'}, Head: ${m.headSize || '-'}, Shoe: ${m.shoeSize || '-'}\nStore: Rd 12, Banjara Hills, Hyd.\nPh: `;
+
+      openSMSModal(c.phone || '', text, `SMS: ${c.name} Profile`);
+    }
+
+    function openSMSModal(phone, text, title = 'Offline Cellular SMS') {
+      const modal = document.getElementById('sms-modal');
+      if (!modal) return;
+      document.getElementById('sms-modal-title').innerText = title;
+      document.getElementById('sms-target-phone').value = phone ? phone.replace(/\D/g, '') : '';
+      document.getElementById('sms-message-text').value = text;
+      updateSMSCharCount();
+      modal.classList.remove('hidden');
+    }
+
+    function closeSMSModal() {
+      const modal = document.getElementById('sms-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function updateSMSCharCount() {
+      const phone = (document.getElementById('sms-target-phone')?.value || '').replace(/\D/g, '');
+      const text = document.getElementById('sms-message-text')?.value || '';
+      const countEl = document.getElementById('sms-char-count');
+      if (countEl) countEl.innerText = `${text.length} chars`;
+      
+      const telLink = document.getElementById('sms-tel-link');
+      if (telLink) {
+        telLink.href = phone ? `tel:+91${phone}` : '#';
+      }
+    }
+
+    function triggerDeviceSMS(type = 'auto') {
+      let phone = (document.getElementById('sms-target-phone')?.value || '').replace(/\D/g, '');
+      const text = document.getElementById('sms-message-text')?.value || '';
+      
+      if (!phone) {
+        alert('Please enter a valid 10-digit mobile number.');
+        return;
+      }
+
+      // Auto-copy text first so staff never loses it
+      navigator.clipboard.writeText(text).catch(() => {});
+
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+      if (!isMobile) {
+        // Desktop PC / Laptop: Copy and guide user to Web Messages / SMS Tool
+        alert('📋 Message copied to clipboard!\n\nYou can now paste into Google Messages Web, Phone Link, or your SMS software.');
+        window.open('https://messages.google.com/web', '_blank');
+        return;
+      }
+
+      // Mobile phone (Android / iOS): Open SIM SMS App
+      let separator = isIOS ? '&body=' : '?body=';
+      let cleanNumber = phone.length === 10 ? phone : phone.slice(-10);
+      const smsUrl = `sms:${cleanNumber}${separator}${encodeURIComponent(text)}`;
+
+      window.location.href = smsUrl;
+    }
+
+    function copySMSText() {
+      const text = document.getElementById('sms-message-text')?.value || '';
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btn-copy-sms');
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400 mr-1.5"></i> Copied!';
+          btn.className = 'bg-emerald-700 text-white font-bold p-2.5 rounded-xl text-xs flex items-center justify-center shadow-sm';
+          setTimeout(() => {
+            btn.innerHTML = '<i class="fa-solid fa-copy mr-1.5"></i> 📋 Copy Message';
+            btn.className = 'bg-stone-900 hover:bg-stone-800 text-amber-300 font-bold p-2.5 rounded-xl text-xs flex items-center justify-center shadow-sm';
+          }, 2000);
+        }
+      }).catch(() => {
+        alert('SMS text copied to clipboard!');
+      });
+    }
+
+    function openGoogleMessagesWeb() {
+      const text = document.getElementById('sms-message-text')?.value || '';
+      if (text) {
+        navigator.clipboard.writeText(text).catch(() => {});
+        alert('📋 Message copied to clipboard!\n\nOpening Google Messages Web — simply click "Start Chat", type customer number, and paste (Ctrl+V)!');
+      }
+      window.open('https://messages.google.com/web', '_blank');
+    }
+
+    function sendViaWhatsAppWeb() {
+      const phone = (document.getElementById('sms-target-phone')?.value || '').replace(/\D/g, '');
+      const text = document.getElementById('sms-message-text')?.value || '';
+      let cleanPhone = phone;
+      if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
+      const url = `https://web.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    function saveExactSlip(e) {
+      e.preventDefault();
+      const id = document.getElementById('slip-id').value || ('ord_' + Date.now());
+      const rawBill = (document.getElementById('slip-bill').value || '').trim();
+      const billVal = formatBillDisplay(rawBill || getNextBillNo());
+
+      const slipObj = {
+        id: id,
+        date: document.getElementById('slip-date').value,
+        bill: billVal,
+        sman: document.getElementById('slip-sman').value,
+        bcode: document.getElementById('slip-bcode').value,
+        name: document.getElementById('slip-name').value,
+        phone: document.getElementById('slip-phone').value,
+        co: document.getElementById('slip-address').value,
+        address: document.getElementById('slip-address').value,
+        colour: document.getElementById('slip-colour').value,
+        style: document.getElementById('slip-style').value,
+        fabric: document.getElementById('slip-fabric').value,
+        // Upper Body (1 to 14)
+        length: document.getElementById('ub-length').value,
+        shoulder: document.getElementById('ub-shoulder').value,
+        sleeves: document.getElementById('ub-sleeves').value,
+        chest: document.getElementById('ub-chest').value,
+        neck: document.getElementById('ub-neck').value,
+        stomach: document.getElementById('ub-stomach').value,
+        hips: document.getElementById('ub-hips').value,
+        armhole: document.getElementById('ub-armhole').value,
+        arms: document.getElementById('ub-arms').value,
+        frSide: document.getElementById('ub-frside').value,
+        bkSide: document.getElementById('ub-bkside').value,
+        headSize: document.getElementById('ub-headsize').value,
+        ubExtra1: document.getElementById('ub-extra1').value,
+        ubExtra2: document.getElementById('ub-extra2').value,
+        // Lower Body (1 to 10)
+        pantLength: document.getElementById('lb-pantlength').value,
+        waist: document.getElementById('lb-waist').value,
+        thighs: document.getElementById('lb-thighs').value,
+        seat: document.getElementById('lb-seat').value,
+        inside: document.getElementById('lb-inside').value,
+        bottom: document.getElementById('lb-bottom').value,
+        calf: document.getElementById('lb-calf').value,
+        shoeSize: document.getElementById('lb-shoesize').value,
+        lbExtra1: document.getElementById('lb-extra1').value,
+        lbExtra2: document.getElementById('lb-extra2').value,
+        // Design, Staff & Accounts
+        styleNotes: document.getElementById('p-style-notes').value,
+        extraInfo: document.getElementById('p-extrainfo').value,
+        sizeBy: document.getElementById('slip-sizeby').value,
+        givenTo: document.getElementById('slip-givento').value,
+        receivedBy: document.getElementById('slip-receivedby').value,
+        tailor: document.getElementById('p-tailor').value,
+        trialDate: document.getElementById('p-trialdate').value,
+        delDate: document.getElementById('p-deldate').value,
+        delTime: document.getElementById('p-deltime').value,
+        grTotal: document.getElementById('p-grtotal').value,
+        advance: document.getElementById('p-advance').value,
+        balance: document.getElementById('p-balance').value
+      };
+
+      const idx = orders.findIndex(x => x.id === id);
+      if (idx >= 0) orders[idx] = slipObj;
+      else orders.unshift(slipObj);
+
+      // Auto-save client in Customers DB
+      if (slipObj.name) {
+        const cIdx = customers.findIndex(c => c.name.toLowerCase() === slipObj.name.toLowerCase());
+        if (cIdx < 0) {
+          customers.unshift({
+            id: 'cust_' + Date.now(),
+            name: slipObj.name,
+            phone: slipObj.phone,
+            co: slipObj.co,
+            measurements: {
+              length: slipObj.length,
+              shoulder: slipObj.shoulder,
+              chest: slipObj.chest,
+              waist: slipObj.waist,
+              headSize: slipObj.headSize,
+              calf: slipObj.calf,
+              shoeSize: slipObj.shoeSize
+            }
+          });
+          syncCustomers();
+        }
+      }
+
+      syncOrders();
+      switchTab('alterations');
+    }
+
+    function editExactSlip(id) {
+      const o = orders.find(x => x.id === id);
+      if (!o) return;
+
+      document.getElementById('slip-id').value = o.id;
+      document.getElementById('slip-date').value = o.date || '';
+      document.getElementById('slip-bill').value = o.bill || '';
+      document.getElementById('slip-sman').value = o.sman || '';
+      document.getElementById('slip-bcode').value = o.bcode || '';
+      document.getElementById('slip-name').value = o.name || '';
+      document.getElementById('slip-phone').value = o.phone || '';
+      document.getElementById('slip-address').value = o.co || o.address || '';
+      document.getElementById('slip-colour').value = o.colour || '';
+      document.getElementById('slip-style').value = o.style || '';
+      document.getElementById('slip-fabric').value = o.fabric || '';
+
+      // Upper Body
+      document.getElementById('ub-length').value = o.length || o['1'] || '';
+      document.getElementById('ub-shoulder').value = o.shoulder || o['2'] || '';
+      document.getElementById('ub-sleeves').value = o.sleeves || o['3'] || '';
+      document.getElementById('ub-chest').value = o.chest || o['4'] || '';
+      document.getElementById('ub-neck').value = o.neck || o['5'] || '';
+      document.getElementById('ub-stomach').value = o.stomach || o['8'] || '';
+      document.getElementById('ub-hips').value = o.hips || o['11'] || '';
+      document.getElementById('ub-armhole').value = o.armhole || o['24'] || '';
+      document.getElementById('ub-arms').value = o.arms || o['25'] || '';
+      document.getElementById('ub-frside').value = o.frSide || o['6'] || '';
+      document.getElementById('ub-bkside').value = o.bkSide || o['7'] || '';
+      document.getElementById('ub-headsize').value = o.headSize || '';
+      document.getElementById('ub-extra1').value = o.ubExtra1 || '';
+      document.getElementById('ub-extra2').value = o.ubExtra2 || '';
+
+      // Lower Body
+      document.getElementById('lb-pantlength').value = o.pantLength || o['9'] || '';
+      document.getElementById('lb-waist').value = o.waist || o['10'] || '';
+      document.getElementById('lb-thighs').value = o.thighs || o['12'] || '';
+      document.getElementById('lb-seat').value = o.seat || o['13'] || '';
+      document.getElementById('lb-inside').value = o.inside || o['14'] || '';
+      document.getElementById('lb-bottom').value = o.bottom || o['15'] || '';
+      document.getElementById('lb-calf').value = o.calf || '';
+      document.getElementById('lb-shoesize').value = o.shoeSize || '';
+      document.getElementById('lb-extra1').value = o.lbExtra1 || '';
+      document.getElementById('lb-extra2').value = o.lbExtra2 || '';
+
+      // Design, Staff & Master Signatures
+      document.getElementById('p-style-notes').value = o.styleNotes || o['16'] || '';
+      document.getElementById('p-extrainfo').value = o.extraInfo || o['23'] || '';
+      document.getElementById('slip-sizeby').value = o.sizeBy || o.tailor || '';
+      document.getElementById('slip-givento').value = o.givenTo || o.tailor || '';
+      document.getElementById('slip-receivedby').value = o.receivedBy || '';
+      document.getElementById('p-tailor').value = o.tailor || o['28'] || '';
+      document.getElementById('p-trialdate').value = o.trialDate || o['17'] || '';
+      document.getElementById('p-deldate').value = o.delDate || o['18'] || '';
+      document.getElementById('p-deltime').value = o.delTime || o['19'] || '';
+      document.getElementById('p-grtotal').value = o.grTotal || o['20'] || '';
+      document.getElementById('p-advance').value = o.advance || o['21'] || '';
+      document.getElementById('p-balance').value = o.balance || o['22'] || '';
+
+      switchTab('new-slip');
+    }
+
+    function createInvoiceFromSlip(slipId) {
+      const o = orders.find(x => x.id === slipId);
+      if (!o) return;
+      switchTab('new-invoice');
+      document.getElementById('inv-no').value = formatBillDisplay(o.bill);
+      document.getElementById('inv-cust-name').value = o.name;
+      document.getElementById('inv-cust-phone').value = o.phone || '';
+      invoiceItems = [];
+      addInvoiceItemRow('GARMENT', 1, o.style || 'Custom Bespoke Suit', Number(o.grTotal) || 0);
+    }
+
+    // ==========================================
+    // 📄 MASTER ALTERATION SHEET TEMPLATE (PRINT & PDF)
+    // ==========================================
+    function generateSlipHtml(o) {
+      const sizeByVal = o.sizeBy || o.tailor || 'Master';
+      const givenToVal = o.givenTo || o.tailor || '';
+      const receivedByVal = o.receivedBy || '';
+      const notesVal = o.extraInfo || o.notes || o.styleNotes || '';
+
+      return `
+        <div class="single-page-sheet" style="width: 100%; max-width: 680px; margin: 0 auto; box-sizing: border-box; border: 2px solid #1c1917; border-radius: 6px; padding: 10px 14px; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 10.5px; background: #fff; color: #111; line-height: 1.3; position: relative; page-break-inside: avoid !important; break-inside: avoid !important;">
+          
+          <!-- Top Header: ATELIER Heritage & Alteration Sheet Title -->
+          <div style="border-bottom: 2px solid #1c1917; padding-bottom: 4px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 20px; font-weight: 900; letter-spacing: 2px; color: #7a1518; font-family: 'Times New Roman', Georgia, serif; line-height: 1;">ATELIER</div>
+              <div style="font-size: 8px; font-weight: 800; color: #8b0000; letter-spacing: 1.2px; margin-top: 1px;">LEGACY OF 135 YEARS • BESPOKE TAILORING WORKSHOP</div>
+              <div style="font-size: 7.5px; color: #555; margin-top: 1px;">Plot No-8, Rd No-12, Banjara Hills, Hyderabad-500034 • ☎ </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="background: #7a1518; color: #fff; font-weight: 900; font-size: 12px; letter-spacing: 1.2px; padding: 3px 10px; border-radius: 4px; display: inline-block;">
+                ALTERATION SHEET
+              </div>
+            </div>
+          </div>
+
+          <!-- Master Order Metadata Header (DATE, Bill NO, SALES MAN, C.NAME, STYLE INFO, COLOUR) -->
+          <div style="border: 1.5px solid #1c1917; border-radius: 4px; padding: 5px 8px; margin-bottom: 6px; background: #fafafa; font-size: 10.5px;">
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 3px 12px; margin-bottom: 3px;">
+              <div style="display: flex; align-items: baseline;">
+                <span style="font-weight: 900; width: 90px; color: #111;">DATE:</span>
+                <span style="flex: 1; border-bottom: 1px dotted #555; font-weight: bold; color: #111; padding-left: 4px;">${escapeHtml(o.date || '-')}</span>
+              </div>
+              <div style="display: flex; align-items: baseline;">
+                <span style="font-weight: 900; width: 70px; color: #111;">Bill NO:</span>
+                <span style="flex: 1; border-bottom: 1px dotted #555; font-weight: 900; color: #b91c1c; font-size: 13px; padding-left: 4px;">#${escapeHtml(formatBillDisplay(o.bill))}</span>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: baseline; margin-bottom: 3px;">
+              <span style="font-weight: 900; width: 90px; color: #111;">SALES MAN:</span>
+              <span style="flex: 1; border-bottom: 1px dotted #555; font-weight: bold; color: #111; padding-left: 4px;">${escapeHtml(o.sman || '-')}</span>
+            </div>
+
+            <div style="display: flex; align-items: baseline; margin-bottom: 3px;">
+              <span style="font-weight: 900; width: 90px; color: #111;">C.NAME:</span>
+              <span style="flex: 1; border-bottom: 1px dotted #555; font-weight: 900; color: #7a1518; font-size: 12px; padding-left: 4px;">${escapeHtml(o.name)} ${o.phone ? ' • 📞 ' + escapeHtml(o.phone) : ''} ${o.co ? ' (' + escapeHtml(o.co) + ')' : ''}</span>
+            </div>
+
+            <div style="display: flex; align-items: baseline; margin-bottom: 3px;">
+              <span style="font-weight: 900; width: 90px; color: #111;">STYLE INFO:</span>
+              <span style="flex: 1; border-bottom: 1px dotted #555; font-weight: bold; color: #111; padding-left: 4px;">${escapeHtml(o.style || '-')}${o.styleNotes ? ' • ' + escapeHtml(o.styleNotes) : ''}</span>
+            </div>
+
+            <div style="display: flex; align-items: baseline;">
+              <span style="font-weight: 900; width: 90px; color: #111;">COLOUR:</span>
+              <span style="flex: 1; border-bottom: 1px dotted #555; font-weight: bold; color: #111; padding-left: 4px;">${escapeHtml(o.colour || '-')}${o.fabric ? ' • Fabric: ' + escapeHtml(o.fabric) : ''}</span>
+            </div>
+          </div>
+
+          <!-- Master Measurements: Column-wise in Single Line -->
+          <div style="margin-bottom: 6px; border: 1.5px solid #1c1917; border-radius: 4px; overflow: hidden; background: #fff;">
+            <div style="background: #1c1917; color: #fff; font-weight: 900; font-size: 9.5px; padding: 3px 8px; letter-spacing: 1px; display: flex; justify-content: space-between;">
+              <span>MEASUREMENT PARAMETERS</span>
+              <span style="color: #fde047; font-weight: bold;">SIZE (INCHES ")</span>
+            </div>
+            
+            <table style="width: 100%; border-collapse: collapse; font-size: 10.5px;">
+              <tbody>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; width: 60%; color: #111;">LENGTH</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.length || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">SHOULDER</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.shoulder || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">SLEEVES</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.sleeves || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">CHEST</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.chest || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">STOMACH</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.stomach || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">NECK</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.neck || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">P.LENGTH</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.pantLength || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">WAIST</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.waist || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">HIPS</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.hips || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">THIGHS</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.thighs || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">SEAT</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.seat || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px dotted #ddd;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">INSEAM</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.inside || '-')}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #1c1917;">
+                  <td style="padding: 2.5px 8px; font-weight: 900; color: #111;">BOTTOM</td>
+                  <td style="padding: 2.5px 8px; text-align: right; font-weight: 900; font-size: 12px; color: #7a1518;">${escapeHtml(o.bottom || '-')}</td>
+                </tr>
+                ${(o.armhole || o.arms || o.headSize || o.calf || o.shoeSize) ? `
+                <tr style="background: #fafafa;">
+                  <td style="padding: 2px 8px; font-weight: bold; color: #555;">EXTRAS</td>
+                  <td style="padding: 2px 8px; text-align: right; font-weight: bold; color: #333;">
+                    ${[
+                      o.armhole ? 'Armhole: ' + o.armhole : '',
+                      o.arms ? 'Arms: ' + o.arms : '',
+                      o.headSize ? 'Head: ' + o.headSize : '',
+                      o.calf ? 'Calf: ' + o.calf : '',
+                      o.shoeSize ? 'Shoe: ' + o.shoeSize : ''
+                    ].filter(Boolean).join(' • ')}
+                  </td>
+                </tr>` : ''}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- DELIVERY DATE & SIZE BY -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px;">
+            <div style="border: 1.5px solid #1c1917; border-radius: 4px; padding: 4px 6px; background: #f0fdf4; display: flex; align-items: baseline;">
+              <span style="font-weight: 900; color: #166534; width: 105px;">DELIVERY DATE:</span>
+              <span style="flex: 1; border-bottom: 1.5px solid #166534; font-weight: 900; font-size: 11.5px; color: #166534; padding-left: 4px;">${escapeHtml(o.delDate || '-')} ${escapeHtml(o.delTime || '')}</span>
+            </div>
+            <div style="border: 1.5px solid #1c1917; border-radius: 4px; padding: 4px 6px; background: #fafafa; display: flex; align-items: baseline;">
+              <span style="font-weight: 900; color: #111; width: 65px;">SIZE BY:</span>
+              <span style="flex: 1; border-bottom: 1px dotted #555; font-weight: 900; color: #7a1518; font-size: 11px; padding-left: 4px;">${escapeHtml(sizeByVal)}</span>
+            </div>
+          </div>
+
+          <!-- Additional Notes / Special requirements -->
+          <div style="border: 1.5px solid #1c1917; border-radius: 4px; padding: 4px 6px; margin-bottom: 6px; background: #fffdf5;">
+            <div style="font-weight: 900; font-size: 9px; color: #92400e; margin-bottom: 1px; text-transform: uppercase;">
+              Additional Notes / Special requirements:
+            </div>
+            <div style="min-height: 18px; font-weight: bold; color: #222; font-size: 10px; line-height: 1.3; border-bottom: 1px dotted #ccc; padding-bottom: 1px;">
+              ${escapeHtml(notesVal || 'Standard fit alteration as per master instructions.')}
+            </div>
+          </div>
+
+          <!-- Given To & Recieved By Signatures -->
+          <div style="border: 1.5px solid #1c1917; border-radius: 4px; padding: 5px 8px; background: #fafafa; font-size: 10px;">
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px; margin-bottom: 4px;">
+              <div style="display: flex; align-items: baseline;">
+                <span style="font-weight: 900; width: 70px; color: #111;">Given To:</span>
+                <span style="flex: 1; border-bottom: 1px solid #333; font-weight: bold; color: #111; padding-left: 4px;">${escapeHtml(givenToVal)}</span>
+              </div>
+              <div style="display: flex; align-items: baseline;">
+                <span style="font-weight: 900; width: 70px; color: #111;">Signature:</span>
+                <span style="flex: 1; border-bottom: 1px solid #333;">&nbsp;</span>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px;">
+              <div style="display: flex; align-items: baseline;">
+                <span style="font-weight: 900; width: 70px; color: #111;">Recieved By:</span>
+                <span style="flex: 1; border-bottom: 1px solid #333; font-weight: bold; color: #111; padding-left: 4px;">${escapeHtml(receivedByVal)}</span>
+              </div>
+              <div style="display: flex; align-items: baseline;">
+                <span style="font-weight: 900; width: 70px; color: #111;">Signature:</span>
+                <span style="flex: 1; border-bottom: 1px solid #333;">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 🖨️ SINGLE-CUSTOMER ALTERATION SLIP PRINT & PDF
+    // ==========================================
+    function printSingleExactSlip(id) {
+      const o = orders.find(x => x.id === id);
+      if (!o) return;
+      const p = document.getElementById('print-area');
+      p.innerHTML = generateSlipHtml(o);
+      window.print();
+    }
+
+    let isPdfGenerating = false;
+    function downloadSlipPDF(id) {
+      if (isPdfGenerating) return;
+      const o = orders.find(x => x.id === id);
+      if (!o) return;
+
+      isPdfGenerating = true;
+      const oldOverlay = document.getElementById('pdf-capture-overlay');
+      if (oldOverlay) oldOverlay.remove();
+
+      const overlay = document.createElement('div');
+      overlay.id = 'pdf-capture-overlay';
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(0, 0, 0, 0.75)';
+      overlay.style.zIndex = '99999';
+      overlay.style.display = 'flex';
+      overlay.style.flexDirection = 'column';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.padding = '10px';
+      overlay.style.overflow = 'auto';
+
+      overlay.innerHTML = `
+        <div style="color: #fef08a; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; margin-bottom: 8px;">
+          ⏳ Generating 1-Page Alteration Sheet PDF for ${escapeHtml(o.name)}...
+        </div>
+        <div id="pdf-target-element" style="width: 680px; max-width: 100%; background: #ffffff; padding: 8px; box-sizing: border-box; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+          ${generateSlipHtml(o)}
+        </div>
+      `;
+
+      document.body.appendChild(overlay);
+
+      const target = document.getElementById('pdf-target-element');
+      const filename = `ATELIER_Alteration_Sheet_#${formatBillDisplay(o.bill)}_${(o.name || 'Client').replace(/\s+/g, '_')}.pdf`;
+      const opt = {
+        margin: [4, 4, 4, 4],
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          scrollX: 0,
+          scrollY: 0
+        },
+        jsPDF: {
+          unit: 'mm',
+          format: 'a4',
+          orientation: 'portrait'
+        },
+        pagebreak: { mode: 'avoid-all' }
+      };
+
+      setTimeout(() => {
+        html2pdf().set(opt).from(target).save().then(() => {
+          if (document.body.contains(overlay)) document.body.removeChild(overlay);
+          isPdfGenerating = false;
+        }).catch((err) => {
+          console.error(err);
+          if (document.body.contains(overlay)) document.body.removeChild(overlay);
+          isPdfGenerating = false;
+        });
+      }, 250);
+    }
+
+    function printAll4Slips() {
+      const p = document.getElementById('print-area');
+      const fourSlips = orders.slice(0, 4);
+      
+      p.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; font-family: Arial, sans-serif; font-size: 9px; width: 100%;">
+          ${fourSlips.map((o) => `
+            <div style="border: 1.5px solid #000; padding: 6px 8px; position: relative; background: #fff; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <div style="text-align: center; font-weight: 900; font-size: 11px; border-bottom: 1.5px solid #000; padding-bottom: 2px; margin-bottom: 4px; color: #7a1518; letter-spacing: 0.5px;">
+                  ATELIER • ALTERATION SHEET
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; font-size: 9px; margin-bottom: 2px;">
+                  <span><strong>DATE:</strong> ${escapeHtml(o.date || '-')}</span>
+                  <span><strong>Bill NO:</strong> <strong style="color: #b91c1c; font-size: 11px;">#${escapeHtml(formatBillDisplay(o.bill))}</strong></span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 8.5px; margin-bottom: 2px;">
+                  <span><strong>SALES MAN:</strong> ${escapeHtml(o.sman || '-')}</span>
+                  <span><strong>SIZE BY:</strong> ${escapeHtml(o.sizeBy || o.tailor || 'Master')}</span>
+                </div>
+                <div style="font-size: 9px; font-weight: bold; color: #111; margin-bottom: 2px;">
+                  <strong>C.NAME:</strong> <span style="color: #7a1518;">${escapeHtml(o.name)}</span> ${o.phone ? '• ' + escapeHtml(o.phone) : ''}
+                </div>
+                <div style="font-size: 8.5px; margin-bottom: 2px;">
+                  <strong>STYLE INFO:</strong> ${escapeHtml(o.style || '-')}${o.styleNotes ? ' • ' + escapeHtml(o.styleNotes) : ''}
+                </div>
+                <div style="font-size: 8.5px; margin-bottom: 4px;">
+                  <strong>COLOUR:</strong> ${escapeHtml(o.colour || '-')}${o.fabric ? ' • ' + escapeHtml(o.fabric) : ''}
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; font-size: 7.5px; margin-bottom: 3px;" border="1" bordercolor="#ccc">
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">LENGTH</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.length || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">SHOULDER</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.shoulder || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">SLEEVES</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.sleeves || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">CHEST</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.chest || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">STOMACH</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.stomach || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">NECK</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.neck || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">P.LENGTH</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.pantLength || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">WAIST</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.waist || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">HIPS</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.hips || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">THIGHS</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.thighs || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">SEAT</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.seat || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">INSEAM</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.inside || '-'}</td></tr>
+                  <tr><td style="padding: 1px 3px; font-weight: bold;">BOTTOM</td><td style="padding: 1px 3px; text-align: right; font-weight: bold; color: #7a1518;">${o.bottom || '-'}</td></tr>
+                </table>
+
+                <div style="font-size: 8.5px; margin-bottom: 2px;">
+                  <strong>DELIVERY DATE:</strong> <strong style="color: #166534;">${escapeHtml(o.delDate || '-')} ${escapeHtml(o.delTime || '')}</strong>
+                </div>
+                <div style="font-size: 8px; color: #444; margin-bottom: 4px; font-style: italic;">
+                  <strong>Notes:</strong> ${escapeHtml(o.extraInfo || o.styleNotes || 'Standard fit alteration.')}
+                </div>
+              </div>
+
+              <div style="border-top: 1px solid #000; padding-top: 2px; font-size: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px;">
+                <div>Given To: <strong>${escapeHtml(o.givenTo || o.tailor || '____')}</strong></div>
+                <div>Sign: _________</div>
+                <div>Recieved By: <strong>${escapeHtml(o.receivedBy || '____')}</strong></div>
+                <div>Sign: _________</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      window.print();
+    }
+
+    // ==========================================
+    // GST Billing
+    // ==========================================
+    // ==========================================
+    // GST Billing
+    // ==========================================
+    let invoiceItems = [];
+
+    function addInvoiceItemRow(code = '', qty = 1, desc = '', price = 0) {
+      if (typeof qty === 'string' && typeof desc === 'number') {
+        const tmp = qty;
+        qty = desc;
+        desc = tmp;
+      }
+      invoiceItems.push({
+        sno: invoiceItems.length + 1,
+        productCode: code,
+        qty: Number(qty) || 1,
+        description: desc,
+        unitPrice: Number(price) || 0,
+        total: (Number(qty) || 1) * (Number(price) || 0)
+      });
+      renderInvoiceItemRows();
+      calculateInvoiceTotals();
+    }
+
+    function removeInvoiceItemRow(index) {
+      invoiceItems.splice(index, 1);
+      invoiceItems.forEach((item, idx) => item.sno = idx + 1);
+      renderInvoiceItemRows();
+      calculateInvoiceTotals();
+    }
+
+    function renderInvoiceItemRows() {
+      const tbody = document.getElementById('inv-items-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      invoiceItems.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="p-2.5 text-center font-bold text-stone-600">${item.sno}</td>
+          <td class="p-1.5"><input type="text" value="${escapeHtml(item.productCode)}" oninput="updateItem(${idx}, 'productCode', this.value)" class="w-full border p-1.5 rounded-lg font-bold uppercase focus:border-red-600 outline-none text-xs" placeholder="e.g. SH6709"></td>
+          <td class="p-1.5"><input type="number" min="1" value="${item.qty}" oninput="updateItem(${idx}, 'qty', this.value)" class="w-full border p-1.5 rounded-lg text-center font-bold focus:border-red-600 outline-none text-xs"></td>
+          <td class="p-1.5"><input type="text" value="${escapeHtml(item.description)}" oninput="updateItem(${idx}, 'description', this.value)" class="w-full border p-1.5 rounded-lg font-medium focus:border-red-600 outline-none text-xs" placeholder="e.g. PEARL SHERWANI SET WITH STOLE"></td>
+          <td class="p-1.5"><input type="number" min="0" value="${item.unitPrice}" oninput="updateItem(${idx}, 'unitPrice', this.value)" class="w-full border p-1.5 rounded-lg text-right font-bold focus:border-red-600 outline-none text-xs" placeholder="0"></td>
+          <td class="p-2.5 text-right font-black text-stone-900 text-xs">₹${Number(item.total).toLocaleString('en-IN')}</td>
+          <td class="p-1.5 text-center"><button type="button" onclick="removeInvoiceItemRow(${idx})" class="text-red-500 hover:text-red-700 p-1"><i class="fa-solid fa-trash"></i></button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateItem(idx, field, value) {
+      if (field === 'qty' || field === 'unitPrice') {
+        invoiceItems[idx][field] = Number(value) || 0;
+        invoiceItems[idx].total = invoiceItems[idx].qty * invoiceItems[idx].unitPrice;
+      } else {
+        invoiceItems[idx][field] = value;
+      }
+      calculateInvoiceTotals();
+    }
+
+    function calculateInvoiceTotals() {
+      const subtotal = invoiceItems.reduce((sum, item) => sum + (Number(item.total) || 0), 0);
+      const discount = Number(document.getElementById('inv-discount')?.value) || 0;
+      const taxable = Math.max(0, subtotal - discount);
+      const gstRate = Number(document.getElementById('inv-gst-rate')?.value) || 0;
+      const gstAmount = Math.round((taxable * gstRate) / 100);
+      const grandTotal = taxable + gstAmount;
+      const advance = Number(document.getElementById('inv-advance')?.value) || 0;
+      const balance = Math.max(0, grandTotal - advance);
+
+      if (document.getElementById('lbl-subtotal')) document.getElementById('lbl-subtotal').innerText = `₹${subtotal.toLocaleString('en-IN')}`;
+      if (document.getElementById('lbl-gst-amount')) document.getElementById('lbl-gst-amount').innerText = `+ ₹${gstAmount.toLocaleString('en-IN')}`;
+      if (document.getElementById('lbl-grand-total')) document.getElementById('lbl-grand-total').innerText = `₹${grandTotal.toLocaleString('en-IN')}`;
+      if (document.getElementById('inv-balance')) document.getElementById('inv-balance').value = balance;
+    }
+
+    function saveInvoice(e) {
+      e.preventDefault();
+      if (invoiceItems.length === 0) {
+        alert('Please add at least one product item.');
+        return;
+      }
+
+      const subtotal = invoiceItems.reduce((sum, item) => sum + (Number(item.total) || 0), 0);
+      const discount = Number(document.getElementById('inv-discount').value) || 0;
+      const taxable = Math.max(0, subtotal - discount);
+      const gstRate = Number(document.getElementById('inv-gst-rate').value) || 0;
+      const gstAmount = Math.round((taxable * gstRate) / 100);
+      const grandTotal = taxable + gstAmount;
+      const advance = Number(document.getElementById('inv-advance').value) || 0;
+      const balance = Math.max(0, grandTotal - advance);
+
+      const id = document.getElementById('inv-id').value || 'inv_' + Date.now();
+      const rawInvNo = (document.getElementById('inv-no').value || '').trim();
+      const invNoVal = formatBillDisplay(rawInvNo || getNextInvoiceNo());
+
+      const invObj = {
+        id: id,
+        invoiceNo: invNoVal,
+        date: document.getElementById('inv-date').value,
+        deliveryDate: document.getElementById('inv-delivery-date').value || '',
+        salesman: document.getElementById('inv-salesman').value,
+        storeGstin: document.getElementById('inv-store-gstin').value,
+        customerName: document.getElementById('inv-cust-name').value,
+        customerPhone: document.getElementById('inv-cust-phone').value,
+        customerGstin: document.getElementById('inv-cust-gstin').value,
+        items: JSON.parse(JSON.stringify(invoiceItems)),
+        subtotal: subtotal,
+        discount: discount,
+        taxableAmount: taxable,
+        gstRate: gstRate,
+        gstAmount: gstAmount,
+        grandTotal: grandTotal,
+        advancePaid: advance,
+        balanceDue: balance,
+        paymentStatus: balance === 0 ? 'Fully Paid' : (advance > 0 ? `Partial (₹${advance} Paid, ₹${balance} Bal)` : 'Pending'),
+        notes: document.getElementById('inv-notes').value
+      };
+
+      const idx = invoices.findIndex(x => x.id === id);
+      if (idx >= 0) invoices[idx] = invObj;
+      else invoices.unshift(invObj);
+
+      syncInvoices();
+      switchTab('billing');
+    }
+
+    function renderInvoices() {
+      const listEl = document.getElementById('invoices-list');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+      invoices.forEach(inv => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-2xl p-4 shadow-sm border border-stone-200 flex flex-col space-y-2.5';
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-black text-red-800 bg-red-50 px-2 py-0.5 rounded border border-red-200">#${escapeHtml(inv.invoiceNo)}</span>
+                <h3 class="font-bold text-stone-900 text-base">${escapeHtml(inv.customerName)}</h3>
+              </div>
+              <div class="text-xs text-stone-500 mt-0.5 space-x-2 flex items-center flex-wrap gap-y-1">
+                <span>Date: ${escapeHtml(inv.date)}</span>
+                ${inv.deliveryDate ? `<span class="bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded font-bold border border-emerald-300">🚚 Delivery (DD): ${escapeHtml(inv.deliveryDate)}</span>` : ''}
+                ${inv.salesman ? `<span>• S.MAN: <strong>${escapeHtml(inv.salesman)}</strong></span>` : ''}
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-black text-stone-900 text-lg">₹${Number(inv.grandTotal).toLocaleString('en-IN')}</div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border bg-emerald-50 text-emerald-800">${escapeHtml(inv.paymentStatus)}</span>
+            </div>
+          </div>
+
+          <div class="bg-stone-50 p-2.5 rounded-xl text-xs border overflow-hidden">
+            <table class="w-full text-left">
+              <thead>
+                <tr class="text-[10px] uppercase font-bold text-stone-500 border-b pb-1">
+                  <th class="w-8 text-center">#</th>
+                  <th class="w-24">Code</th>
+                  <th class="w-10 text-center">Qty</th>
+                  <th>Description</th>
+                  <th class="w-20 text-right">Price</th>
+                  <th class="w-20 text-right">Total</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-stone-100">
+                ${inv.items.map((it, idx) => `
+                  <tr>
+                    <td class="py-1 text-center font-bold text-stone-400">${idx + 1}</td>
+                    <td class="py-1 font-bold text-red-800">${escapeHtml(it.productCode)}</td>
+                    <td class="py-1 text-center font-bold">${it.qty}</td>
+                    <td class="py-1 text-stone-700">${escapeHtml(it.description)}</td>
+                    <td class="py-1 text-right text-stone-500">₹${Number(it.unitPrice).toLocaleString('en-IN')}</td>
+                    <td class="py-1 text-right font-bold text-stone-900">₹${Number(it.total).toLocaleString('en-IN')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="flex justify-between items-center text-xs pt-1 border-t flex-wrap gap-2">
+            <span>Advance: ₹${Number(inv.advancePaid).toLocaleString('en-IN')} | Balance: <strong class="text-red-700">₹${Number(inv.balanceDue).toLocaleString('en-IN')}</strong></span>
+            <div class="flex space-x-1.5 items-center flex-wrap gap-1">
+              <!-- Edit / Re-bill Button -->
+              <button onclick="editInvoice('${inv.id}')" class="bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold px-2.5 py-1.5 rounded-lg border border-blue-300 text-xs shadow-sm flex items-center" title="Edit invoice details, rebill or reduce price">
+                <i class="fa-solid fa-pen-to-square mr-1 text-blue-600"></i> Edit / Re-bill
+              </button>
+              <!-- PDF Download Button (WhatsApp / Email) -->
+              <button onclick="downloadInvoicePDF('${inv.id}')" class="bg-red-800 hover:bg-red-900 text-amber-300 font-bold px-2.5 py-1.5 rounded-lg flex items-center shadow-sm text-xs" title="Download 1-Page PDF Invoice for Email/WhatsApp">
+                <i class="fa-solid fa-file-pdf mr-1"></i> PDF
+              </button>
+              <!-- WhatsApp Button -->
+              <button onclick="shareInvoiceWhatsApp('${inv.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded-lg flex items-center shadow-sm text-xs" title="Send Tax Invoice on WhatsApp">
+                <i class="fa-brands fa-whatsapp text-sm mr-1"></i> WhatsApp
+              </button>
+              <!-- Offline Cellular SMS Button -->
+              <button onclick="sendInvoiceSMS('${inv.id}')" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-2.5 py-1.5 rounded-lg flex items-center shadow-sm text-xs" title="Send Offline SMS (No Internet/WhatsApp)">
+                <i class="fa-solid fa-comment-sms text-sm mr-1"></i> SMS
+              </button>
+              <!-- Print Full Digital Bill on White Paper -->
+              <button onclick="printInvoice('${inv.id}')" class="bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold px-2.5 py-1.5 rounded-lg border text-xs" title="Print Full Matching Bill with Graphics on Plain Paper">
+                <i class="fa-solid fa-print mr-1"></i> Digital Bill
+              </button>
+              <!-- Offline Hard-Copy Pre-Printed Paper Pad Print -->
+              <button onclick="openPadPrintModal('${inv.id}')" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-black px-3 py-1.5 rounded-lg border border-amber-600 text-xs shadow flex items-center" title="Calibrate and Print on Original Pre-Printed Paper Pad">
+                <i class="fa-solid fa-file-invoice mr-1 text-red-900"></i> 📋 Hard Copy
+              </button>
+            </div>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    // ==========================================
+    // ✏️ EDIT / RE-BILL INVOICE FUNCTION
+    // ==========================================
+    function editInvoice(id) {
+      const inv = invoices.find(x => x.id === id);
+      if (!inv) return;
+      switchTab('new-invoice');
+      if (document.getElementById('invoice-form-title')) {
+        document.getElementById('invoice-form-title').innerText = `Edit Tax Invoice #${inv.invoiceNo} (Re-bill / Price Reduction)`;
+      }
+      document.getElementById('inv-id').value = inv.id;
+      document.getElementById('inv-no').value = inv.invoiceNo;
+      document.getElementById('inv-date').value = inv.date;
+      document.getElementById('inv-delivery-date').value = inv.deliveryDate || '';
+      document.getElementById('inv-salesman').value = inv.salesman || '';
+      document.getElementById('inv-store-gstin').value = inv.storeGstin || '36AAIFI6985N1ZG';
+      document.getElementById('inv-cust-name').value = inv.customerName;
+      document.getElementById('inv-cust-phone').value = inv.customerPhone || '';
+      document.getElementById('inv-cust-gstin').value = inv.customerGstin || '';
+      document.getElementById('inv-notes').value = inv.notes || '';
+      document.getElementById('inv-discount').value = inv.discount || 0;
+      document.getElementById('inv-gst-rate').value = inv.gstRate || 5;
+      document.getElementById('inv-advance').value = inv.advancePaid || 0;
+      
+      invoiceItems = JSON.parse(JSON.stringify(inv.items || []));
+      if (invoiceItems.length === 0) {
+        addInvoiceItemRow('', 1, '', 0);
+      } else {
+        renderInvoiceItemRows();
+        calculateInvoiceTotals();
+      }
+    }
+
+    // ==========================================
+    // 🖨️ OFFLINE HARD-COPY PAPER PAD PRINTER & CALIBRATION ENGINE
+    // ==========================================
+    let padCalib = JSON.parse(localStorage.getItem('ATELIER_PAD_CALIB')) || {
+      offsetY: 0,
+      offsetX: 0,
+      rowHeight: 8.5,
+      fontSize: 12,
+      showGuide: true
+    };
+
+    let currentPadInvId = null;
+
+    function openPadPrintModal(invId) {
+      currentPadInvId = invId;
+      const modal = document.getElementById('pad-print-modal');
+      if (modal) modal.classList.remove('hidden');
+      updateCalibUI();
+      renderPadPreview();
+    }
+
+    function closePadPrintModal() {
+      const modal = document.getElementById('pad-print-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function adjustPadCalib(prop, delta) {
+      if (prop === 'offsetY' || prop === 'offsetX') {
+        padCalib[prop] = Math.round((padCalib[prop] + delta) * 10) / 10;
+      } else if (prop === 'rowHeight') {
+        padCalib[prop] = Math.max(5, Math.round((padCalib[prop] + delta) * 10) / 10);
+      } else if (prop === 'fontSize') {
+        padCalib[prop] = Math.max(8, Math.min(20, padCalib[prop] + delta));
+      }
+      updateCalibUI();
+      renderPadPreview();
+    }
+
+    function togglePadGuide() {
+      padCalib.showGuide = !padCalib.showGuide;
+      updateCalibUI();
+      renderPadPreview();
+    }
+
+    function savePadCalib() {
+      localStorage.setItem('ATELIER_PAD_CALIB', JSON.stringify(padCalib));
+      alert('✅ Alignment settings saved successfully!');
+    }
+
+    function updateCalibUI() {
+      if (document.getElementById('lbl-pad-offset-y')) document.getElementById('lbl-pad-offset-y').innerText = padCalib.offsetY + 'mm';
+      if (document.getElementById('lbl-pad-offset-x')) document.getElementById('lbl-pad-offset-x').innerText = padCalib.offsetX + 'mm';
+      if (document.getElementById('lbl-pad-row-height')) document.getElementById('lbl-pad-row-height').innerText = padCalib.rowHeight + 'mm';
+      if (document.getElementById('lbl-pad-font-size')) document.getElementById('lbl-pad-font-size').innerText = padCalib.fontSize + 'px';
+      if (document.getElementById('lbl-toggle-guide')) {
+        document.getElementById('lbl-toggle-guide').innerText = padCalib.showGuide ? 'Hide Background Guide' : 'Show Background Guide';
+      }
+    }
+
+    function generatePadFillHtml(inv, isForPhysicalPrint = false) {
+      // Clean vector stationery guide (Only rendered during screen preview when showGuide is on)
+      const guideOverlay = (!isForPhysicalPrint && padCalib.showGuide) ? `
+        <div style="position: absolute; top: 0; left: 0; width: 210mm; min-height: 297mm; pointer-events: none; opacity: 0.22; border: 2.5px solid #7a1518; border-radius: 12px; padding: 18px; box-sizing: border-box;">
+          <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+            <div style="flex: 1.1; border: 1.5px solid #7a1518; border-radius: 10px; padding: 8px 10px; text-align: center;">
+              <div style="font-size: 22px; font-weight: 900; color: #7a1518; font-family: serif;">ATELIER</div>
+              <div style="font-size: 8px; font-weight: bold; color: #7a1518;">LEGACY OF 135 YEARS</div>
+            </div>
+            <div style="flex: 1.8; border: 1.5px solid #7a1518; border-radius: 10px; padding: 8px 12px; font-size: 9px; color: #333;">
+              <div>📍 Plot No-8, Rd No-12, Banjara Hills, Hyderabad</div>
+              <div>📞 , </div>
+            </div>
+            <div style="flex: 1.1; border: 1.5px solid #7a1518; border-radius: 10px; padding: 8px 12px; font-size: 10px; color: #7a1518;">
+              <div>Bill No. : [ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ]</div>
+              <div>S. Code : [ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ]</div>
+              <div>Date &nbsp;&nbsp;&nbsp;: [ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ]</div>
+            </div>
+          </div>
+          <div style="border: 1.5px solid #7a1518; border-radius: 8px; height: 130mm; margin-top: 15px;">
+            <div style="background: #7a1518; color: white; padding: 5px; font-size: 10px; display: flex;">
+              <span style="width: 8%; text-align: center;">S.No.</span>
+              <span style="width: 22%;">Product Code</span>
+              <span style="width: 8%; text-align: center;">Qty</span>
+              <span style="width: 36%;">Product Description</span>
+              <span style="width: 13%; text-align: right;">Unit Price</span>
+              <span style="width: 13%; text-align: right;">Total Price</span>
+            </div>
+          </div>
+          <div style="margin-top: 10px; display: flex; justify-content: space-between;">
+            <div style="font-size: 8px; color: #666; width: 50%;">ALL MAJOR CREDIT CARDS ACCEPTED • SILK DRY CLEAN ONLY</div>
+            <div style="font-size: 10px; color: #7a1518; text-align: right; width: 45%;">Subtotal / GST / Grand Total / Paid / Balance</div>
+          </div>
+        </div>
+      ` : '';
+
+      return `
+        <div style="width: 210mm; min-height: 297mm; position: relative; box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; font-size: ${padCalib.fontSize}px; color: #000; font-weight: bold; background: transparent; transform: translate(${padCalib.offsetX}mm, ${padCalib.offsetY}mm);">
+          
+          ${guideOverlay}
+
+          <!-- 1. Top Right Box Blanks: Bill No, S. Code, Date -->
+          <div style="position: absolute; top: 38mm; right: 25mm; width: 38mm; text-align: left; font-size: ${padCalib.fontSize + 1}px; color: #000; font-weight: bold;">
+            ${escapeHtml(inv.invoiceNo)}
+          </div>
+          <div style="position: absolute; top: 48mm; right: 25mm; width: 38mm; text-align: left; font-size: ${padCalib.fontSize}px; color: #000; font-weight: bold;">
+            ${escapeHtml(inv.salesman || '-')}
+          </div>
+          <div style="position: absolute; top: 58mm; right: 25mm; width: 38mm; text-align: left; font-size: ${padCalib.fontSize}px; color: #000; font-weight: bold;">
+            ${escapeHtml(inv.date)}
+          </div>
+
+          <!-- Customer Info Line (Above items table) -->
+          <div style="position: absolute; top: 72mm; left: 24mm; width: 110mm; font-size: ${padCalib.fontSize}px; color: #000; font-weight: bold;">
+            ${escapeHtml(inv.customerName)} ${inv.customerPhone ? '• ' + escapeHtml(inv.customerPhone) : ''}
+          </div>
+          ${inv.customerGstin ? `
+            <div style="position: absolute; top: 72mm; right: 25mm; font-size: ${padCalib.fontSize - 1}px; font-family: monospace; color: #000;">
+              ${escapeHtml(inv.customerGstin)}
+            </div>
+          ` : ''}
+
+          <!-- 2. Main Table Blanks: S.No, Product Code, Qty, Product Description, Unit Price, Total Price -->
+          <div style="position: absolute; top: 88mm; left: 20mm; width: 170mm;">
+            <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: ${padCalib.fontSize}px; color: #000;">
+              <tbody>
+                ${inv.items.map((it, idx) => `
+                  <tr style="height: ${padCalib.rowHeight}mm; vertical-align: middle;">
+                    <td style="width: 14mm; text-align: center; font-weight: bold;">${idx + 1}</td>
+                    <td style="width: 32mm; text-align: left; padding-left: 2mm; font-weight: bold;">${escapeHtml(it.productCode)}</td>
+                    <td style="width: 14mm; text-align: center; font-weight: bold;">${it.qty}</td>
+                    <td style="width: 62mm; text-align: left; padding-left: 2mm; font-weight: bold;">${escapeHtml(it.description)}</td>
+                    <td style="width: 24mm; text-align: right; padding-right: 2mm; font-weight: bold;">${Number(it.unitPrice).toLocaleString('en-IN')}</td>
+                    <td style="width: 24mm; text-align: right; padding-right: 2mm; font-weight: bold;">${Number(it.total).toLocaleString('en-IN')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 3. Bottom Blanks: Subtotal, GST (5%), Grand Total, Paid, Balance -->
+          <div style="position: absolute; top: 204mm; right: 25mm; width: 62mm; text-align: right; font-size: ${padCalib.fontSize}px; line-height: 1.55; color: #000; font-weight: bold;">
+            <div>Subtotal: <strong>${Number(inv.subtotal).toLocaleString('en-IN')}</strong></div>
+            ${inv.discount > 0 ? `<div>Discount: - ${Number(inv.discount).toLocaleString('en-IN')}</div>` : ''}
+            <div>GST (${inv.gstRate}%): <strong>${Number(inv.gstAmount).toLocaleString('en-IN')}</strong></div>
+            <div style="font-size: ${padCalib.fontSize + 2}px; font-weight: 900; margin-top: 1.5mm; border-top: 1px dashed #000; padding-top: 1mm;">
+              Total: ${Number(inv.grandTotal).toLocaleString('en-IN')}.00
+            </div>
+            <div style="margin-top: 2mm; font-size: ${padCalib.fontSize}px;">
+              Paid: <strong>${Number(inv.advancePaid).toLocaleString('en-IN')}</strong>
+            </div>
+            <div style="font-size: ${padCalib.fontSize + 1}px; font-weight: 900;">
+              Balance: <strong>${Number(inv.balanceDue).toLocaleString('en-IN')}</strong>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPadPreview() {
+      if (!currentPadInvId) return;
+      const inv = invoices.find(x => x.id === currentPadInvId);
+      if (!inv) return;
+      const target = document.getElementById('pad-preview-target');
+      if (target) target.innerHTML = generatePadFillHtml(inv, false);
+    }
+
+    function printCalibratedPad() {
+      if (!currentPadInvId) return;
+      const inv = invoices.find(x => x.id === currentPadInvId);
+      if (!inv) return;
+      const p = document.getElementById('print-area');
+      p.innerHTML = generatePadFillHtml(inv, true);
+      window.print();
+    }
+
+    // ==========================================
+    // 📄 DIGITAL INVOICE HTML TEMPLATE (FOR PDF, WHATSAPP & BLANK PAPER PRINT)
+    // ==========================================
+    function generateInvoiceHtml(inv) {
+      return `
+        <div style="width: 100%; box-sizing: border-box; border: 2.5px solid #7a1518; border-radius: 12px; padding: 18px; font-family: Arial, Helvetica, sans-serif; font-size: 11px; background: #fff; color: #111; position: relative;">
+          
+          <!-- Top Header: 3 Rounded Boxes in Exact Row -->
+          <div style="display: flex; gap: 8px; margin-bottom: 10px; align-items: stretch;">
+            
+            <!-- Box 1: Brand & Legacy -->
+            <div style="flex: 1.1; border: 1.5px solid #7a1518; border-radius: 10px; padding: 8px 10px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #fff;">
+              <div style="font-size: 24px; font-weight: 900; letter-spacing: 2px; color: #7a1518; font-family: 'Times New Roman', Georgia, serif; line-height: 1;">ATELIER</div>
+              <div style="font-size: 8.5px; font-weight: 800; color: #8b0000; letter-spacing: 1.5px; margin-top: 4px;">LEGACY OF 135 YEARS</div>
+            </div>
+            
+            <!-- Box 2: Address & Contact Details -->
+            <div style="flex: 2; border: 1.5px solid #7a1518; border-radius: 10px; padding: 7px 10px; font-size: 9.5px; color: #222; display: flex; flex-direction: column; justify-content: center; background: #fff;">
+              <div style="display: flex; align-items: flex-start; margin-bottom: 3px;">
+                <span style="color: #7a1518; margin-right: 6px; font-size: 11px; line-height: 1.3;">📍</span>
+                <div style="line-height: 1.35; color: #222;">
+                  <div>Plot No-8, Rd No-12, Banjara Hills,</div>
+                  <div>Beside Command &amp; Control Police Commissionerate,</div>
+                  <div>Hyderabad-500034, Telangana (T.S)</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; font-weight: bold; margin-top: 3px; color: #111;">
+                <span style="color: #7a1518; margin-right: 6px; font-size: 11px; line-height: 1;">📞</span>
+                <span>, </span>
+              </div>
+            </div>
+
+            <!-- Box 3: Bill No, S. Code, Date, Delivery Date -->
+            <div style="flex: 1.1; border: 1.5px solid #7a1518; border-radius: 10px; padding: 8px 12px; font-size: 10.5px; display: flex; flex-direction: column; justify-content: space-around; background: #fff;">
+              <div>Bill No. : <strong style="color: #b91c1c; font-size: 13px;">${escapeHtml(inv.invoiceNo)}</strong></div>
+              <div>S. Code : <strong>${escapeHtml(inv.salesman || '-')}</strong></div>
+              <div>Date &nbsp;&nbsp;&nbsp;: <strong>${escapeHtml(inv.date)}</strong></div>
+              ${inv.deliveryDate ? `<div style="color: #047857;">Del. Date: <strong style="color: #047857;">${escapeHtml(inv.deliveryDate)}</strong></div>` : ''}
+            </div>
+          </div>
+
+          <!-- Customer Name & Details Banner -->
+          <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 10px; background: #fff8f6; padding: 6px 12px; border: 1px solid #fed7aa; border-radius: 6px; align-items: center; flex-wrap: wrap; gap: 6px;">
+            <div><strong>Order For:</strong> <span style="font-size: 13px; font-weight: bold; color: #7a1518;">${escapeHtml(inv.customerName)}</span> ${inv.customerPhone ? '• 📞 ' + escapeHtml(inv.customerPhone) : ''}</div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              ${inv.deliveryDate ? `<div><strong>Delivery (DD):</strong> <span style="font-weight: bold; color: #047857;">🚚 ${escapeHtml(inv.deliveryDate)}</span></div>` : ''}
+              ${inv.customerGstin ? `<div><strong>Customer GSTIN:</strong> <span style="font-family: monospace; font-weight: bold;">${escapeHtml(inv.customerGstin)}</span></div>` : ''}
+            </div>
+          </div>
+
+          <!-- Main Table: Exactly S.No., Product Code, Qty, Product Description, Unit Price, Total Price -->
+          <div style="border: 1.5px solid #7a1518; border-radius: 8px; overflow: hidden; margin-bottom: 10px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed;">
+              <thead>
+                <tr style="background: linear-gradient(135deg, #7a1518 0%, #901c20 100%); color: white; text-align: left;">
+                  <th style="padding: 6px 8px; width: 8%; text-align: center; border-right: 1px solid #991b1b; font-size: 10.5px;">S.No.</th>
+                  <th style="padding: 6px 8px; width: 22%; border-right: 1px solid #991b1b; font-size: 10.5px;">Product Code</th>
+                  <th style="padding: 6px 8px; width: 8%; text-align: center; border-right: 1px solid #991b1b; font-size: 10.5px;">Qty</th>
+                  <th style="padding: 6px 8px; width: 36%; border-right: 1px solid #991b1b; font-size: 10.5px;">Product Description</th>
+                  <th style="padding: 6px 8px; width: 13%; text-align: right; border-right: 1px solid #991b1b; font-size: 10.5px;">Unit Price</th>
+                  <th style="padding: 6px 8px; width: 13%; text-align: right; font-size: 10.5px;">Total Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${inv.items.map((it, idx) => `
+                  <tr style="border-bottom: 1px solid #e5e7eb;">
+                    <td style="padding: 6px 8px; text-align: center; border-right: 1px solid #e5e7eb; font-weight: bold; color: #555;">${idx + 1}</td>
+                    <td style="padding: 6px 8px; font-weight: bold; border-right: 1px solid #e5e7eb; color: #7a1518;">${escapeHtml(it.productCode)}</td>
+                    <td style="padding: 6px 8px; text-align: center; border-right: 1px solid #e5e7eb; font-weight: bold;">${it.qty}</td>
+                    <td style="padding: 6px 8px; border-right: 1px solid #e5e7eb; font-weight: 500;">${escapeHtml(it.description)}</td>
+                    <td style="padding: 6px 8px; text-align: right; border-right: 1px solid #e5e7eb;">₹${Number(it.unitPrice).toLocaleString('en-IN')}</td>
+                    <td style="padding: 6px 8px; text-align: right; font-weight: bold; color: #111;">₹${Number(it.total).toLocaleString('en-IN')}</td>
+                  </tr>
+                `).join('')}
+                ${Array.from({ length: Math.max(0, 4 - inv.items.length) }).map(() => `
+                  <tr style="border-bottom: 1px solid #f9fafb; height: 26px;">
+                    <td style="border-right: 1px solid #f9fafb;">&nbsp;</td>
+                    <td style="border-right: 1px solid #f9fafb;"></td>
+                    <td style="border-right: 1px solid #f9fafb;"></td>
+                    <td style="border-right: 1px solid #f9fafb;"></td>
+                    <td style="border-right: 1px solid #f9fafb;"></td>
+                    <td></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Bottom Summary & Physical Stationery Terms -->
+          <div style="display: flex; gap: 10px; margin-bottom: 10px; font-size: 10.5px;">
+            
+            <!-- Left: Credit Cards Banner & Terms Notice -->
+            <div style="flex: 1.35; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="background: linear-gradient(135deg, #7a1518 0%, #8b0000 100%); color: white; font-size: 9.5px; font-weight: bold; text-align: center; padding: 4px 8px; border-radius: 4px; letter-spacing: 0.5px; margin-bottom: 5px;">
+                ALL MAJOR CREDIT CARDS ACCEPTED
+              </div>
+              <div style="border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px 8px; font-size: 8px; color: #444; line-height: 1.35; background: #fafafa;">
+                <strong>NOTE :</strong> In the rare event if you find any slightest manufacturing defect or fault do not hesitate for replacement within 2 days. Goods once sold will not be taken back but can be exchanged with the same range for colour or size at our total descrition. Once bill generated will not be canceled. <strong>SILK MATERIAL DRY CLEANING ONLY AND NO GUARANTEE.</strong>
+              </div>
+            </div>
+
+            <!-- Right: Financial Accounts Summary -->
+            <div style="flex: 1.1; background: #fff8f6; border: 1px solid #fed7aa; border-radius: 8px; padding: 8px 12px; font-size: 10.5px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                <span>Subtotal:</span>
+                <strong>₹${Number(inv.subtotal).toLocaleString('en-IN')}</strong>
+              </div>
+              ${inv.discount > 0 ? `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2px; color: #b91c1c;">
+                  <span>Special Discount:</span>
+                  <strong>- ₹${Number(inv.discount).toLocaleString('en-IN')}</strong>
+                </div>
+              ` : ''}
+              <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                <span>GST (${inv.gstRate}%):</span>
+                <strong>+ ₹${Number(inv.gstAmount).toLocaleString('en-IN')}</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 900; color: #7a1518; border-top: 1.5px solid #7a1518; padding-top: 4px; margin-top: 3px;">
+                <span>GRAND TOTAL:</span>
+                <span>₹${Number(inv.grandTotal).toLocaleString('en-IN')}.00</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-top: 5px; padding-top: 3px; border-top: 1px dashed #fed7aa; font-size: 10px; color: #555;">
+                <span>Advance: <strong>₹${Number(inv.advancePaid).toLocaleString('en-IN')}</strong></span>
+                <span>Balance: <strong style="color: #b91c1c;">₹${Number(inv.balanceDue).toLocaleString('en-IN')}</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Signatures -->
+          <div style="display: flex; justify-content: space-between; font-size: 10.5px; border-top: 1px solid #7a1518; padding-top: 12px; margin-top: 6px;">
+            <div>Customer Signature: __________________</div>
+            <div>For <strong>ATELIER</strong> (Authorized Signatory)</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 🖨️ SINGLE-CUSTOMER GST TAX INVOICE PRINT & PDF
+    // ==========================================
+    function printInvoice(id) {
+      const inv = invoices.find(x => x.id === id);
+      if (!inv) return;
+      const p = document.getElementById('print-area');
+      p.innerHTML = generateInvoiceHtml(inv);
+      window.print();
+    }
+
+    function downloadInvoicePDF(id) {
+      const inv = invoices.find(x => x.id === id);
+      if (!inv) return;
+
+      const overlay = document.createElement('div');
+      overlay.id = 'pdf-invoice-capture-overlay';
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(0, 0, 0, 0.7)';
+      overlay.style.zIndex = '99999';
+      overlay.style.display = 'flex';
+      overlay.style.flexDirection = 'column';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.padding = '15px';
+      overlay.style.overflow = 'auto';
+
+      overlay.innerHTML = `
+        <div style="color: #fef08a; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; margin-bottom: 10px;">
+          ⏳ Generating ATELIER Tax Invoice PDF for ${escapeHtml(inv.customerName)}...
+        </div>
+        <div id="pdf-invoice-target-element" style="width: 720px; max-width: 100%; background: #ffffff; padding: 12px; box-sizing: border-box; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+          ${generateInvoiceHtml(inv, false)}
+        </div>
+      `;
+
+      document.body.appendChild(overlay);
+
+      const target = document.getElementById('pdf-invoice-target-element');
+      const filename = `ATELIER_Tax_Invoice_${inv.invoiceNo}_${(inv.customerName || 'Client').replace(/\s+/g, '_')}.pdf`;
+      const opt = {
+        margin: [5, 5, 5, 5],
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          scrollX: 0,
+          scrollY: 0
+        },
+        jsPDF: {
+          unit: 'mm',
+          format: 'a4',
+          orientation: 'portrait'
+        },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+
+      setTimeout(() => {
+        html2pdf().set(opt).from(target).save().then(() => {
+          if (document.body.contains(overlay)) document.body.removeChild(overlay);
+        }).catch((err) => {
+          console.error(err);
+          if (document.body.contains(overlay)) document.body.removeChild(overlay);
+        });
+      }, 300);
+    }
+
+    function renderCustomers() {
+      const listEl = document.getElementById('customers-list');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+      customers.forEach(c => {
+        const m = c.measurements || {};
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-2xl p-3.5 border border-stone-200 text-xs shadow-sm';
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="font-bold text-stone-900 text-sm">${escapeHtml(c.name)}</h3>
+              <div class="text-stone-500">${c.co ? escapeHtml(c.co) : ''} ${c.phone ? '• ' + escapeHtml(c.phone) : ''}</div>
+            </div>
+            <div class="flex space-x-1.5 flex-wrap gap-1">
+              <button onclick="shareCustomerWhatsApp('${c.id}')" class="bg-emerald-50 text-emerald-800 hover:bg-emerald-100 font-bold px-2 py-1 rounded-lg border border-emerald-300 text-[11px] flex items-center" title="Send Measurements on WhatsApp">
+                <i class="fa-brands fa-whatsapp mr-1 text-emerald-600"></i> WhatsApp
+              </button>
+              <!-- Offline Cellular SMS Button -->
+              <button onclick="sendCustomerSMS('${c.id}')" class="bg-sky-50 text-sky-800 hover:bg-sky-100 font-bold px-2 py-1 rounded-lg border border-sky-300 text-[11px] flex items-center" title="Send Measurements via Offline SMS">
+                <i class="fa-solid fa-comment-sms mr-1 text-sky-600"></i> SMS
+              </button>
+              <button onclick="createSlipForCustomer('${c.id}')" class="bg-red-800 text-amber-300 font-bold px-2.5 py-1 rounded-lg text-[11px]">
+                + Alteration
+              </button>
+            </div>
+          </div>
+          <div class="mt-2 bg-stone-50 p-2 rounded-lg grid grid-cols-4 gap-1 text-center font-mono text-[11px]">
+            <div><span class="text-stone-400 font-sans">Len:</span> ${m.length || '-'}</div>
+            <div><span class="text-stone-400 font-sans">Chest:</span> ${m.chest || '-'}</div>
+            <div><span class="text-stone-400 font-sans">Waist:</span> ${m.waist || '-'}</div>
+            <div><span class="text-stone-400 font-sans">Head:</span> ${m.headSize || '-'}</div>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    function createSlipForCustomer(custId) {
+      const c = customers.find(x => x.id === custId);
+      if (!c) return;
+      switchTab('new-slip');
+      document.getElementById('slip-name').value = c.name;
+      document.getElementById('slip-phone').value = c.phone || '';
+      document.getElementById('slip-address').value = c.co || c.city || '';
+      const m = c.measurements || {};
+      if (m.length) document.getElementById('ub-length').value = m.length;
+      if (m.shoulder) document.getElementById('ub-shoulder').value = m.shoulder;
+      if (m.sleeves) document.getElementById('ub-sleeves').value = m.sleeves;
+      if (m.chest) document.getElementById('ub-chest').value = m.chest;
+      if (m.neck) document.getElementById('ub-neck').value = m.neck;
+      if (m.stomach) document.getElementById('ub-stomach').value = m.stomach;
+      if (m.headSize) document.getElementById('ub-headsize').value = m.headSize;
+      if (m.pantLength) document.getElementById('lb-pantlength').value = m.pantLength;
+      if (m.waist) document.getElementById('lb-waist').value = m.waist;
+      if (m.calf) document.getElementById('lb-calf').value = m.calf;
+      if (m.shoeSize) document.getElementById('lb-shoesize').value = m.shoeSize;
+    }
+
+    function exportCSV() {
+      let csv = 'Bill No,Date,Customer Name,Phone,Address/Co,Style,1.Length,2.Shoulder,3.Sleeves,4.Chest,5.Neck,6.Stomach,7.Hips,8.Armhole,9.Arms,10.FR,11.BK,12.Head Size,13.Upper Extra 1,14.Upper Extra 2,1.Pant Length,2.Waist,3.Thighs,4.Seat,5.Inside,6.Bottom,7.Calf,8.Shoe Size,9.Lower Extra 1,10.Lower Extra 2,Tailor,ZIK,Gross Total,Advance,Balance\n';
+      orders.forEach(o => {
+        csv += `"${o.bill}","${o.date || ''}","${o.name}","${o.phone || ''}","${o.co || ''}","${o.style || ''}","${o.length || ''}","${o.shoulder || ''}","${o.sleeves || ''}","${o.chest || ''}","${o.neck || ''}","${o.stomach || ''}","${o.hips || ''}","${o.armhole || ''}","${o.arms || ''}","${o.frSide || ''}","${o.bkSide || ''}","${o.headSize || ''}","${o.ubExtra1 || ''}","${o.ubExtra2 || ''}","${o.pantLength || ''}","${o.waist || ''}","${o.thighs || ''}","${o.seat || ''}","${o.inside || ''}","${o.bottom || ''}","${o.calf || ''}","${o.shoeSize || ''}","${o.lbExtra1 || ''}","${o.lbExtra2 || ''}","${o.tailor || ''}","${o.zik || ''}","${o.grTotal || ''}","${o.advance || ''}","${o.balance || ''}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `ATELIER_Alteration_Slips_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+
+    function exportInvoicesCSV() {
+      let csv = 'Invoice No,Date,Salesman,Client Name,Client GSTIN,Subtotal,Discount,GST %,GST Amount,Grand Total,Advance Paid,Balance Due,Payment Status\n';
+      invoices.forEach(i => {
+        csv += `"${i.invoiceNo}","${i.date}","${i.salesman}","${i.customerName}","${i.customerGstin}","${i.subtotal}","${i.discount}","${i.gstRate}","${i.gstAmount}","${i.grandTotal}","${i.advancePaid}","${i.balanceDue}","${i.paymentStatus}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `ATELIER_Invoices_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+
+    function exportCustomersCSV() {
+      let csv = 'Customer Name,Phone,Co,City,Length,Chest,Waist,Head Size,Calf,Shoe Size\n';
+      customers.forEach(c => {
+        const m = c.measurements || {};
+        csv += `"${c.name}","${c.phone || ''}","${c.co || ''}","${c.city || ''}","${m.length || ''}","${m.chest || ''}","${m.waist || ''}","${m.headSize || ''}","${m.calf || ''}","${m.shoeSize || ''}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `ATELIER_Clients_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+
+    function switchTab(tab) {
+      ['alterations', 'new-slip', 'billing', 'new-invoice', 'customers', 'gallery'].forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        if (el) el.classList.add('hidden');
+      });
+      const active = document.getElementById('tab-' + tab);
+      if (active) active.classList.remove('hidden');
+
+      ['alterations', 'billing', 'customers', 'new-slip', 'gallery'].forEach(t => {
+        const btn = document.getElementById('dtab-' + t);
+        if (btn) {
+          if (tab === t) btn.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-amber-500 text-stone-950 shadow';
+          else btn.className = 'px-3.5 py-1.5 rounded-xl font-bold text-stone-300 hover:text-white';
+        }
+      });
+
+      if (tab === 'new-slip') {
+        document.getElementById('exact-slip-form').reset();
+        document.getElementById('slip-id').value = '';
+        document.getElementById('slip-date').valueAsDate = new Date();
+        document.getElementById('slip-bill').value = getNextBillNo();
+      }
+
+      if (tab === 'new-invoice') {
+        if (document.getElementById('invoice-form-title')) {
+          document.getElementById('invoice-form-title').innerText = 'Create Atelier Tax Invoice';
+        }
+        document.getElementById('invoice-form').reset();
+        document.getElementById('inv-id').value = '';
+        document.getElementById('inv-date').valueAsDate = new Date();
+        document.getElementById('inv-delivery-date').value = '';
+        document.getElementById('inv-no').value = getNextInvoiceNo();
+        invoiceItems = [];
+        addInvoiceItemRow('', 1, '', 0);
+      }
+    }
+
+    async function openQRModal() {
+      document.getElementById('qr-modal').classList.remove('hidden');
+      const host = window.location.hostname;
+      const port = window.location.port || '8080';
+      let mobileUrl = `http://${host}:${port}`;
+
+      if (host === 'localhost' || host === '127.0.0.1') {
+        try {
+          const infoRes = await fetch('/api/info').catch(() => null);
+          if (infoRes && infoRes.ok) {
+            const info = await infoRes.json();
+            if (info.url) mobileUrl = info.url;
+          } else {
+            mobileUrl = `http://192.168.101.8:${port}`;
+          }
+        } catch (e) {
+          mobileUrl = `http://192.168.101.8:${port}`;
+        }
+      }
+      
+      document.getElementById('qr-url-text').innerText = mobileUrl;
+      const qrContainer = document.getElementById('qrcode-container');
+      qrContainer.innerHTML = '';
+      new QRCode(qrContainer, {
+        text: mobileUrl,
+        width: 170,
+        height: 170,
+        colorDark: "#1c1917",
+        colorLight: "#ffffff"
+      });
+    }
+
+    function closeQRModal() {
+      document.getElementById('qr-modal').classList.add('hidden');
+    }
+
+    // Startup
+    loadData();
+    switchTab('alterations');
+  </script>
+</body>
+</html>
