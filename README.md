@@ -31,13 +31,14 @@ git push -u origin main
 4. Leave all build settings default (Framework Preset: *Other*, Root Directory: `./`).
 5. Click **Deploy**.
 
-Your website will be live worldwide on a secure `https://manowerlabs.vercel.app` domain with instant global CDN caching and automatic HTTPS!
+The website is live worldwide on a secure `https://manowerlabs.vercel.app` domain with instant global CDN caching and automatic HTTPS.
 
 ---
 
-## 🛠️ How to Customize Your Contact Details
+## 📞 Direct Inquiries & Contact
 
-Your WhatsApp number is set to: **`+91 70659 15814`** (`917065915814`).
+- Official WhatsApp Consultation: **`+91 70659 15814`** (`917065915814`)
+- Direct Web Booking: [manowerlabs.vercel.app](https://manowerlabs.vercel.app)
 
 ---
 
@@ -50,7 +51,7 @@ Your WhatsApp number is set to: **`+91 70659 15814`** (`917065915814`).
 
 ### 2. Local Geo-SEO (Hyderabad & Regional Markets)
 - Hyderabad geographic coordinates (`17.385044, 78.486671`) and `geo.region: IN-TG`.
-- Schema.org `ProfessionalService` structured data linking your lab to Hyderabad commercial hubs (Begum Bazar, Secunderabad, KPHB, Madhapur, Gachibowli) while declaring global remote service capability.
+- Schema.org `ProfessionalService` structured data linking Manower Labs to Hyderabad commercial hubs (Begum Bazar, Secunderabad, KPHB, Madhapur, Gachibowli) while declaring global remote service capability.
 
 ### 3. LLM & Generative Engine Optimization (GEO)
 - `llms.txt` and `llms-full.txt` files compliant with the open standard for AI web crawlers (PerplexityBot, GPTBot, ClaudeBot).

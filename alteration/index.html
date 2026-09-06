@@ -1017,6 +1017,14 @@
       });
     }
 
+    function deleteOrder(id) {
+      if (!confirm('Are you sure you want to delete this alteration slip?')) return;
+      orders = orders.filter(x => x.id !== id);
+      localStorage.setItem('atelier_orders_local', JSON.stringify(orders));
+      renderOrders();
+      updateBadgeCounts();
+    }
+
     // ==========================================
     // 📲 WHATSAPP SHARING FOR ALTERATION SLIPS
     // ==========================================
