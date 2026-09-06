@@ -19,4 +19,6 @@
 - **Service Model**: Local on-site consultation and deployment in Hyderabad; remote autonomous AI agent and custom software delivery for US, UK, UAE, and global clients.
 - **Architecture Philosophy**: Local-first data ownership, zero recurring SaaS lock-in, high-speed lightweight code, zero client data exposure.
 - **Primary Website**: https://manowerlabs.vercel.app/
+- **Direct Email**: manower35@gmail.com
+- **Direct WhatsApp**: +91 70659 15814
 - **Full LLM Documentation**: https://manowerlabs.vercel.app/llms-full.txt

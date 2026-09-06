@@ -38,6 +38,7 @@ The website is live worldwide on a secure `https://manowerlabs.vercel.app` domai
 ## 📞 Direct Inquiries & Contact
 
 - Official WhatsApp Consultation: **`+91 70659 15814`** (`917065915814`)
+- Direct Email: **`manower35@gmail.com`**
 - Direct Web Booking: [manowerlabs.vercel.app](https://manowerlabs.vercel.app)
 
 ---
