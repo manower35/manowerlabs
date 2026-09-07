@@ -59,6 +59,11 @@ The website is live worldwide on a secure `https://manowerlabs.vercel.app` domai
 - JSON-LD `FAQPage` and `SoftwareApplication` structured schemas that AI models extract directly for conversational answers.
 
 ### 4. Interactive Live Demos & Prototypes
+- **Grocery & FMCG WhatsApp Autonomous Sales Agent**: 24/7 Kirana & wholesale order-intake simulator with Hinglish/voice note parsing, SKU matching, wholesale pricing, and dynamic UPI QR code generator.
+- **Logistics & QR Lorry Receipt Tracker**: Real-time dispatch simulator with phone camera scan emulation.
+- **WhatsApp Catalog Collage Engine**: Automated 5-in-1 category bundles and 3:4 HD status collages.
+- **Customer Auto-Lookup Sandbox**: Sub-second search across thousands of customer records and OCR records.
 - `/alteration/`: Live Bespoke Tailoring, Alteration & Billing Workshop ERP.
 - `/alteration/mobile_app.html`: Mobile shop-floor cutter and master tailor job-sheet PWA.
+- **Quick-Jump 3-Dash Menu**: Responsive top navigation drawer providing short, instant preview cards and 1-click deep-dive fetching for all modules and live sandboxes.
 - Zero backend dependencies required for web viewing; utilizes local storage and synthetic sample data.

@@ -5,6 +5,7 @@
 ## Core Specializations
 
 - **Autonomous AI Agents & Multi-Agent Swarms**: Autonomous teams of AI agent workers that coordinate 24/7 across terminals, browsers, and local databases (inventory monitors, automated dispatch auditors, and AI-driven quote generators).
+- **Grocery & FMCG WhatsApp Autonomous Sales Agent**: 24/7 autonomous sales and order-taking agent for Kirana stores, FMCG distributors, super-stockists, and grain/oil wholesale traders. Understands voice messages, Hinglish/Telugu text, and photos of handwritten order chits; matches SKUs, checks stock, applies wholesale tier pricing, calculates GST, and sends instant WhatsApp confirmations with dynamic UPI QR codes and dispatch slips.
 - **Logistics & Dispatch Tracking**: Real-time Bilty / Lorry Receipt (LR) management dashboards with mobile camera QR code scanning, instant status updates, and digital Proof-of-Delivery (POD) without mobile app store dependencies.
 - **WhatsApp Marketing & Catalog Automation**: Automated multi-photo product collage generators (5-in-1, 3:4 HD, vertical formats), interactive HTML catalog viewers, and 1-click broadcast pipelines.
 - **Custom Internal Tools & Mini-ERPs**: 1-click Windows desktop applications (.exe) and local web dashboards for rapid customer auto-lookup, scanned invoice OCR processing, and Excel synchronization.

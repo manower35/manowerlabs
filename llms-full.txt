@@ -17,7 +17,11 @@ Manower Labs is an engineering and AI agent laboratory delivering autonomous age
 - **Problem Solved**: High payroll costs and human fatigue coordinating repetitive cross-system tasks between WhatsApp, ERP spreadsheets, and dispatch slips.
 - **Our Solution**: Autonomous teams of AI agents that coordinate 24/7 across terminals, browsers, and local databases. One agent monitors stock levels, another drafts personalized WhatsApp catalogs, and a third audits dispatch slips.
 
-### Solution A: Custom Logistics & Lorry Receipt (LR) System
+### Solution A: Grocery & FMCG WhatsApp Autonomous Sales Agent
+- **Problem Solved**: Wholesale FMCG distributors, super-stockists, and grain/oil merchants in hubs like Begum Bazar lose significant sales from after-hours orders, voice notes, and messy handwritten paper chits sent by hundreds of kirana shopkeepers. Manual order booking takes hours, causes SKU dispatch mistakes, and creates payment collection delays.
+- **Our Solution**: 24/7 autonomous WhatsApp sales agent powered by LLM fuzzy SKU matching. The agent accepts casual voice notes, mixed Hindi/Telugu/English messages, and photos of handwritten order notebooks. It maps items to inventory SKUs, verifies warehouse stock, applies dealer-tier wholesale discounts, computes GST, and instantly returns a structured order invoice with dynamic UPI QR code. The agent automatically creates dispatch job sheets for warehouse loaders and broadcasts daily morning wholesale mandi rates (Sugar, Edible Oil, Pulses, Rice) directly to retail merchant lists.
+
+### Solution B: Custom Logistics & Lorry Receipt (LR) System
 - **Problem Solved**: Manual paper bilties get lost, tracking phone calls waste hours, and warehouse drivers cannot use complex desktop apps.
 - **Our Solution**: Local-first LR tracking dashboard on PC. Each printed dispatch receipt includes a high-resolution QR code. Loading staff or delivery drivers scan the QR code via their phone camera (via local Wi-Fi or secure tunnel) to instantly mark status (*Booked*, *Reached Hub*, *Out for Delivery*, *Delivered*) and snap Proof of Delivery (POD) photos directly into the PC database.
 
